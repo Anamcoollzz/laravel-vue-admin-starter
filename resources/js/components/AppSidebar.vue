@@ -2,6 +2,7 @@
 import { Link } from "@inertiajs/vue3";
 import {
     BookOpen,
+    Database,
     FolderGit2,
     KeyRound,
     LayoutGrid,
@@ -58,6 +59,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: "/app/permissions",
             icon: KeyRound,
             permission: "permissions.view",
+        },
+        {
+            title: t("nav.backups"),
+            href: "/app/backups",
+            icon: Database,
+            permission: "backups.view",
         },
     ]
         .filter((item) => can(item.permission))

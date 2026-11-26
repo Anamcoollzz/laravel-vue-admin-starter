@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RoleManagementController;
@@ -41,6 +42,13 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::post('/', [PermissionManagementController::class, 'store'])->middleware('permission:permissions.create')->name('store');
         Route::put('/{permission}', [PermissionManagementController::class, 'update'])->middleware('permission:permissions.edit')->name('update');
         Route::delete('/{permission}', [PermissionManagementController::class, 'destroy'])->middleware('permission:permissions.delete')->name('destroy');
+    });
+
+    Route::prefix('backups')->name('backups.')->group(function () {
+        Route::get('/', [DatabaseBackupController::class, 'index'])->middleware('permission:backups.view')->name('index');
+        Route::post('/', [DatabaseBackupController::class, 'store'])->middleware('permission:backups.create')->name('store');
+        Route::get('/{filename}/download', [DatabaseBackupController::class, 'download'])->middleware('permission:backups.view')->name('download');
+        Route::delete('/{filename}', [DatabaseBackupController::class, 'destroy'])->middleware('permission:backups.delete')->name('destroy');
     });
 });
 

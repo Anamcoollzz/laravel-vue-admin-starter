@@ -12,6 +12,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.users": "User Management",
         "nav.roles": "Role Management",
         "nav.permissions": "Permission Management",
+        "nav.backups": "Database Backup",
 
         // Common
         "common.search": "Search...",
@@ -128,6 +129,17 @@ const messages: Record<Locale, Record<string, string>> = {
             "Are you sure you want to delete your account?",
         "delete_account.confirm_desc":
             "Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
+
+        // Database Backup
+        "backups.title": "Database Backup",
+        "backups.description": "Create, download, and manage database backups.",
+        "backups.create": "Create Backup",
+        "backups.creating": "Creating...",
+        "backups.filename": "Filename",
+        "backups.size": "Size",
+        "backups.download": "Download",
+        "backups.driver": "Driver",
+        "backups.empty": "No backups created yet.",
     },
     id: {
         // Navigation
@@ -137,6 +149,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.users": "Manajemen Pengguna",
         "nav.roles": "Manajemen Role",
         "nav.permissions": "Manajemen Izin",
+        "nav.backups": "Backup Database",
 
         // Common
         "common.search": "Cari...",
@@ -253,6 +266,17 @@ const messages: Record<Locale, Record<string, string>> = {
             "Apakah Anda yakin ingin menghapus akun Anda?",
         "delete_account.confirm_desc":
             "Setelah akun dihapus, seluruh data dan sumber daya terkait akan dihapus secara permanen. Masukkan kata sandi Anda untuk mengonfirmasi penghapusan akun secara permanen.",
+
+        // Database Backup
+        "backups.title": "Backup Database",
+        "backups.description": "Buat, unduh, dan kelola file backup database.",
+        "backups.create": "Buat Backup",
+        "backups.creating": "Membuat...",
+        "backups.filename": "Nama File",
+        "backups.size": "Ukuran",
+        "backups.download": "Unduh",
+        "backups.driver": "Driver",
+        "backups.empty": "Belum ada file backup.",
     },
 };
 
