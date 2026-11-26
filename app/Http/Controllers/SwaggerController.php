@@ -4,22 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class SwaggerController extends Controller
 {
     /**
-     * Render the interactive Swagger UI page for the application API.
+     * Render the interactive Swagger UI page for the application API, redirecting to login in production.
      */
-    public function ui(): View
+    public function ui(): View|RedirectResponse
     {
+        if (app()->isProduction()) {
+            return to_route('login');
+        }
+
         return view('swagger');
     }
 
     /**
-     * Return the OpenAPI 3.0.3 JSON specification for the application API endpoints.
+     * Return the OpenAPI 3.0.3 JSON specification for the application API endpoints, redirecting to login in production.
      */
-    public function spec(): JsonResponse
+    public function spec(): JsonResponse|RedirectResponse
     {
+        if (app()->isProduction()) {
+            return to_route('login');
+        }
+
         return response()->json([
             'openapi' => '3.0.3',
             'info' => [
