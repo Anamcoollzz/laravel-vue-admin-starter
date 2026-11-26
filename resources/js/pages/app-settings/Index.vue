@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { Globe, Mail, Shield } from '@lucide/vue';
+import { Globe, Lock, Mail, Shield } from '@lucide/vue';
 import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,16 @@ const props = defineProps<{
     privacy: {
         privacy_policy: string;
     };
+    security: {
+        max_login_attempts: number;
+        lockout_minutes: number;
+        password_min_length: number;
+        password_mixed_case: boolean;
+        password_numbers: boolean;
+        password_symbols: boolean;
+        password_uncompromised: boolean;
+        session_lifetime: number;
+    };
 }>();
 
 const { t } = useTranslation();
@@ -46,7 +56,7 @@ defineOptions({
     },
 });
 
-const activeGroup = ref<'general' | 'smtp' | 'privacy'>('general');
+const activeGroup = ref<'general' | 'smtp' | 'privacy' | 'security'>('general');
 
 // General form
 const generalForm = useForm<{
@@ -121,6 +131,24 @@ const submitPrivacy = () => {
         preserveScroll: true,
     });
 };
+
+// Security form
+const securityForm = useForm({
+    max_login_attempts: props.security.max_login_attempts,
+    lockout_minutes: props.security.lockout_minutes,
+    password_min_length: props.security.password_min_length,
+    password_mixed_case: props.security.password_mixed_case,
+    password_numbers: props.security.password_numbers,
+    password_symbols: props.security.password_symbols,
+    password_uncompromised: props.security.password_uncompromised,
+    session_lifetime: props.security.session_lifetime,
+});
+
+const submitSecurity = () => {
+    securityForm.put('/app/app-settings/security', {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -180,6 +208,20 @@ const submitPrivacy = () => {
                     >
                         <Shield class="size-4 shrink-0" />
                         <span>{{ t('app_settings.group_privacy') }}</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors"
+                        :class="
+                            activeGroup === 'security'
+                                ? 'bg-muted text-foreground'
+                                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                        "
+                        @click="activeGroup = 'security'"
+                    >
+                        <Lock class="size-4 shrink-0" />
+                        <span>{{ t('app_settings.group_security') }}</span>
                     </button>
                 </nav>
             </aside>
@@ -448,7 +490,7 @@ const submitPrivacy = () => {
 
                 <!-- Privacy Policy -->
                 <form
-                    v-else
+                    v-else-if="activeGroup === 'privacy'"
                     class="max-w-2xl space-y-5 rounded-xl border border-border bg-card p-6"
                     @submit.prevent="submitPrivacy"
                 >
@@ -479,6 +521,202 @@ const submitPrivacy = () => {
                         >
                             {{
                                 privacyForm.processing
+                                    ? t('common.saving')
+                                    : t('common.save')
+                            }}
+                        </Button>
+                    </div>
+                </form>
+
+                <!-- Security Settings -->
+                <form
+                    v-else
+                    class="max-w-2xl space-y-5 rounded-xl border border-border bg-card p-6"
+                    @submit.prevent="submitSecurity"
+                >
+                    <h2 class="text-lg font-semibold">
+                        {{ t('app_settings.group_security') }}
+                    </h2>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="grid gap-1.5">
+                            <Label for="sec-max-attempts">
+                                {{ t('app_settings.max_login_attempts') }}
+                            </Label>
+                            <Input
+                                id="sec-max-attempts"
+                                v-model.number="securityForm.max_login_attempts"
+                                type="number"
+                                min="1"
+                                max="100"
+                                required
+                            />
+                            <p class="text-xs text-muted-foreground">
+                                {{ t('app_settings.max_login_attempts_desc') }}
+                            </p>
+                            <InputError
+                                :message="
+                                    securityForm.errors.max_login_attempts
+                                "
+                            />
+                        </div>
+
+                        <div class="grid gap-1.5">
+                            <Label for="sec-lockout">
+                                {{ t('app_settings.lockout_minutes') }}
+                            </Label>
+                            <Input
+                                id="sec-lockout"
+                                v-model.number="securityForm.lockout_minutes"
+                                type="number"
+                                min="1"
+                                max="1440"
+                                required
+                            />
+                            <p class="text-xs text-muted-foreground">
+                                {{ t('app_settings.lockout_minutes_desc') }}
+                            </p>
+                            <InputError
+                                :message="securityForm.errors.lockout_minutes"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="grid gap-1.5">
+                            <Label for="sec-min-length">
+                                {{ t('app_settings.password_min_length') }}
+                            </Label>
+                            <Input
+                                id="sec-min-length"
+                                v-model.number="
+                                    securityForm.password_min_length
+                                "
+                                type="number"
+                                min="6"
+                                max="128"
+                                required
+                            />
+                            <InputError
+                                :message="
+                                    securityForm.errors.password_min_length
+                                "
+                            />
+                        </div>
+
+                        <div class="grid gap-1.5">
+                            <Label for="sec-session-lifetime">
+                                {{ t('app_settings.session_lifetime') }}
+                            </Label>
+                            <Input
+                                id="sec-session-lifetime"
+                                v-model.number="securityForm.session_lifetime"
+                                type="number"
+                                min="5"
+                                max="43200"
+                                required
+                            />
+                            <InputError
+                                :message="securityForm.errors.session_lifetime"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-lg border border-border p-4">
+                        <label
+                            class="flex cursor-pointer items-start gap-3 text-sm"
+                        >
+                            <input
+                                v-model="securityForm.password_mixed_case"
+                                type="checkbox"
+                                class="mt-0.5 size-4 rounded border-input accent-primary"
+                            />
+                            <div>
+                                <p class="font-medium">
+                                    {{ t('app_settings.password_mixed_case') }}
+                                </p>
+                                <p class="text-xs text-muted-foreground">
+                                    {{
+                                        t(
+                                            'app_settings.password_mixed_case_desc',
+                                        )
+                                    }}
+                                </p>
+                            </div>
+                        </label>
+
+                        <label
+                            class="flex cursor-pointer items-start gap-3 text-sm"
+                        >
+                            <input
+                                v-model="securityForm.password_numbers"
+                                type="checkbox"
+                                class="mt-0.5 size-4 rounded border-input accent-primary"
+                            />
+                            <div>
+                                <p class="font-medium">
+                                    {{ t('app_settings.password_numbers') }}
+                                </p>
+                                <p class="text-xs text-muted-foreground">
+                                    {{
+                                        t('app_settings.password_numbers_desc')
+                                    }}
+                                </p>
+                            </div>
+                        </label>
+
+                        <label
+                            class="flex cursor-pointer items-start gap-3 text-sm"
+                        >
+                            <input
+                                v-model="securityForm.password_symbols"
+                                type="checkbox"
+                                class="mt-0.5 size-4 rounded border-input accent-primary"
+                            />
+                            <div>
+                                <p class="font-medium">
+                                    {{ t('app_settings.password_symbols') }}
+                                </p>
+                                <p class="text-xs text-muted-foreground">
+                                    {{
+                                        t('app_settings.password_symbols_desc')
+                                    }}
+                                </p>
+                            </div>
+                        </label>
+
+                        <label
+                            class="flex cursor-pointer items-start gap-3 text-sm"
+                        >
+                            <input
+                                v-model="securityForm.password_uncompromised"
+                                type="checkbox"
+                                class="mt-0.5 size-4 rounded border-input accent-primary"
+                            />
+                            <div>
+                                <p class="font-medium">
+                                    {{
+                                        t('app_settings.password_uncompromised')
+                                    }}
+                                </p>
+                                <p class="text-xs text-muted-foreground">
+                                    {{
+                                        t(
+                                            'app_settings.password_uncompromised_desc',
+                                        )
+                                    }}
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div v-if="can('settings.edit')" class="pt-2">
+                        <Button
+                            type="submit"
+                            :disabled="securityForm.processing"
+                        >
+                            {{
+                                securityForm.processing
                                     ? t('common.saving')
                                     : t('common.save')
                             }}

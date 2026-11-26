@@ -19,6 +19,7 @@ class AppSettingController extends Controller
         $general = Setting::getGroup('general');
         $smtp = Setting::getGroup('smtp');
         $privacy = Setting::getGroup('privacy');
+        $security = Setting::getGroup('security');
 
         return Inertia::render('app-settings/Index', [
             'general' => [
@@ -40,6 +41,16 @@ class AppSettingController extends Controller
             ],
             'privacy' => [
                 'privacy_policy' => $privacy['privacy_policy'] ?? '',
+            ],
+            'security' => [
+                'max_login_attempts' => (int) ($security['security_max_login_attempts'] ?? 5),
+                'lockout_minutes' => (int) ($security['security_lockout_minutes'] ?? 1),
+                'password_min_length' => (int) ($security['security_password_min_length'] ?? 8),
+                'password_mixed_case' => ($security['security_password_mixed_case'] ?? '0') === '1',
+                'password_numbers' => ($security['security_password_numbers'] ?? '0') === '1',
+                'password_symbols' => ($security['security_password_symbols'] ?? '0') === '1',
+                'password_uncompromised' => ($security['security_password_uncompromised'] ?? '0') === '1',
+                'session_lifetime' => (int) ($security['security_session_lifetime'] ?? config('session.lifetime', 120)),
             ],
         ]);
     }
@@ -127,6 +138,36 @@ class AppSettingController extends Controller
         Setting::setValue('privacy', 'privacy_policy', $validated['privacy_policy'] ?? '');
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Privacy policy updated.')]);
+
+        return back();
+    }
+
+    /**
+     * Update security settings including login throttling, password policy, and session lifetime.
+     */
+    public function updateSecurity(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'max_login_attempts' => ['required', 'integer', 'min:1', 'max:100'],
+            'lockout_minutes' => ['required', 'integer', 'min:1', 'max:1440'],
+            'password_min_length' => ['required', 'integer', 'min:6', 'max:128'],
+            'password_mixed_case' => ['boolean'],
+            'password_numbers' => ['boolean'],
+            'password_symbols' => ['boolean'],
+            'password_uncompromised' => ['boolean'],
+            'session_lifetime' => ['required', 'integer', 'min:5', 'max:43200'],
+        ]);
+
+        Setting::setValue('security', 'security_max_login_attempts', (string) $validated['max_login_attempts']);
+        Setting::setValue('security', 'security_lockout_minutes', (string) $validated['lockout_minutes']);
+        Setting::setValue('security', 'security_password_min_length', (string) $validated['password_min_length']);
+        Setting::setValue('security', 'security_password_mixed_case', ! empty($validated['password_mixed_case']) ? '1' : '0');
+        Setting::setValue('security', 'security_password_numbers', ! empty($validated['password_numbers']) ? '1' : '0');
+        Setting::setValue('security', 'security_password_symbols', ! empty($validated['password_symbols']) ? '1' : '0');
+        Setting::setValue('security', 'security_password_uncompromised', ! empty($validated['password_uncompromised']) ? '1' : '0');
+        Setting::setValue('security', 'security_session_lifetime', (string) $validated['session_lifetime']);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Security settings updated.')]);
 
         return back();
     }

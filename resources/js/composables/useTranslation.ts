@@ -303,6 +303,27 @@ const messages: Record<Locale, Record<string, string>> = {
         'app_settings.privacy_policy': 'Privacy Policy Content',
         'app_settings.privacy_placeholder':
             'Write your application privacy policy here...',
+        'app_settings.group_security': 'Security',
+        'app_settings.max_login_attempts': 'Max Login Attempts',
+        'app_settings.max_login_attempts_desc':
+            'Maximum failed login attempts before temporary lockout',
+        'app_settings.lockout_minutes': 'Login Lockout Duration (minutes)',
+        'app_settings.lockout_minutes_desc':
+            'Lockout duration in minutes after exceeding login attempts',
+        'app_settings.password_min_length': 'Minimum Password Length',
+        'app_settings.password_mixed_case': 'Require Uppercase & Lowercase',
+        'app_settings.password_mixed_case_desc':
+            'Password must contain both uppercase and lowercase letters',
+        'app_settings.password_numbers': 'Require Numbers',
+        'app_settings.password_numbers_desc':
+            'Password must contain at least one number',
+        'app_settings.password_symbols': 'Require Symbols',
+        'app_settings.password_symbols_desc':
+            'Password must contain at least one special character',
+        'app_settings.password_uncompromised': 'Check Compromised Passwords',
+        'app_settings.password_uncompromised_desc':
+            'Reject passwords that have appeared in data breaches',
+        'app_settings.session_lifetime': 'Session Lifetime (minutes)',
     },
     id: {
         // Navigation
@@ -602,6 +623,27 @@ const messages: Record<Locale, Record<string, string>> = {
         'app_settings.privacy_policy': 'Isi Kebijakan Privasi',
         'app_settings.privacy_placeholder':
             'Tulis kebijakan privasi aplikasi Anda di sini...',
+        'app_settings.group_security': 'Keamanan',
+        'app_settings.max_login_attempts': 'Maksimal Percobaan Login',
+        'app_settings.max_login_attempts_desc':
+            'Maksimal percobaan login gagal sebelum dikunci sementara',
+        'app_settings.lockout_minutes': 'Durasi Kunci Login (menit)',
+        'app_settings.lockout_minutes_desc':
+            'Durasi penguncian dalam menit setelah melebihi batas percobaan login',
+        'app_settings.password_min_length': 'Panjang Minimal Kata Sandi',
+        'app_settings.password_mixed_case': 'Wajib Huruf Besar & Kecil',
+        'app_settings.password_mixed_case_desc':
+            'Wajib mengandung huruf besar dan huruf kecil pada kata sandi',
+        'app_settings.password_numbers': 'Wajib Angka',
+        'app_settings.password_numbers_desc':
+            'Wajib mengandung minimal satu angka pada kata sandi',
+        'app_settings.password_symbols': 'Wajib Simbol',
+        'app_settings.password_symbols_desc':
+            'Wajib mengandung minimal satu karakter spesial pada kata sandi',
+        'app_settings.password_uncompromised': 'Cek Kata Sandi Bocor',
+        'app_settings.password_uncompromised_desc':
+            'Tolak kata sandi yang pernah bocor di kebocoran data',
+        'app_settings.session_lifetime': 'Masa Berlaku Sesi (menit)',
     },
 };
 

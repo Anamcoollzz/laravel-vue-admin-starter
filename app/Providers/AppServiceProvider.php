@@ -102,6 +102,48 @@ class AppServiceProvider extends ServiceProvider
             if (! empty($settings['smtp_from_name'])) {
                 config(['mail.from.name' => $settings['smtp_from_name']]);
             }
+
+            if (! empty($settings['security_max_login_attempts'])) {
+                config(['security.max_login_attempts' => max(1, (int) $settings['security_max_login_attempts'])]);
+            }
+
+            if (! empty($settings['security_lockout_minutes'])) {
+                config(['security.lockout_minutes' => max(1, (int) $settings['security_lockout_minutes'])]);
+            }
+
+            if (! empty($settings['security_session_lifetime'])) {
+                config(['session.lifetime' => max(5, (int) $settings['security_session_lifetime'])]);
+            }
+
+            if (isset($settings['security_password_min_length'])) {
+                $minLength = max(6, (int) $settings['security_password_min_length']);
+                $mixedCase = ($settings['security_password_mixed_case'] ?? '0') === '1';
+                $numbers = ($settings['security_password_numbers'] ?? '0') === '1';
+                $symbols = ($settings['security_password_symbols'] ?? '0') === '1';
+                $uncompromised = ($settings['security_password_uncompromised'] ?? '0') === '1';
+
+                Password::defaults(function () use ($minLength, $mixedCase, $numbers, $symbols, $uncompromised): Password {
+                    $rule = Password::min($minLength);
+
+                    if ($mixedCase) {
+                        $rule->mixedCase();
+                    }
+
+                    if ($numbers) {
+                        $rule->numbers();
+                    }
+
+                    if ($symbols) {
+                        $rule->symbols();
+                    }
+
+                    if ($uncompromised) {
+                        $rule->uncompromised();
+                    }
+
+                    return $rule;
+                });
+            }
         } catch (Throwable) {
             // Skip runtime overrides when the database is unavailable (e.g. during composer scripts).
         }

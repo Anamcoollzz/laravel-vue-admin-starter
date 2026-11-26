@@ -112,6 +112,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::post('/general', [AppSettingController::class, 'updateGeneral'])->middleware('permission:settings.edit')->name('general');
         Route::put('/smtp', [AppSettingController::class, 'updateSmtp'])->middleware('permission:settings.edit')->name('smtp');
         Route::put('/privacy', [AppSettingController::class, 'updatePrivacy'])->middleware('permission:settings.edit')->name('privacy');
+        Route::put('/security', [AppSettingController::class, 'updateSecurity'])->middleware('permission:settings.edit')->name('security');
     });
 });
 
