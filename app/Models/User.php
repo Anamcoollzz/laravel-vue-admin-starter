@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -59,7 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     protected function avatar(): Attribute
     {
         return Attribute::get(
-            fn (): ?string => $this->avatar_path ? Storage::disk('public')->url($this->avatar_path) : null,
+            fn (): ?string => $this->avatar_path ? '/storage/'.ltrim($this->avatar_path, '/') : null,
         );
     }
 
