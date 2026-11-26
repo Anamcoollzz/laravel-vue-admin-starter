@@ -39,6 +39,10 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'appSettings' => [
+                'logo' => config('app.logo'),
+                'favicon' => config('app.favicon'),
+            ],
             'locale' => fn (): string => app()->getLocale(),
             'auth' => [
                 'user' => $request->user(),
