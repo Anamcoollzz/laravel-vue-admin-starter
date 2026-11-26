@@ -9,6 +9,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.platform': 'Platform',
         'nav.access_control': 'Access Control',
         'nav.dashboard': 'Dashboard',
+        'nav.announcements': 'Announcements',
         'nav.users': 'User Management',
         'nav.roles': 'Role Management',
         'nav.permissions': 'Permission Management',
@@ -239,12 +240,35 @@ const messages: Record<Locale, Record<string, string>> = {
         'laravel_logs.view_detail': 'View Detail',
         'laravel_logs.no_files': 'No log files found in storage/logs.',
         'laravel_logs.no_entries': 'No log entries found.',
+
+        // Announcements
+        'announcements.title': 'Announcements',
+        'announcements.description':
+            'Create and manage announcements displayed on the dashboard.',
+        'announcements.add': 'Add Announcement',
+        'announcements.edit': 'Edit Announcement',
+        'announcements.create_desc':
+            'Create a new announcement to display on the dashboard.',
+        'announcements.edit_desc':
+            'Update announcement content and visibility.',
+        'announcements.field_title': 'Title',
+        'announcements.field_content': 'Content',
+        'announcements.field_type': 'Type',
+        'announcements.field_status': 'Status',
+        'announcements.field_active': 'Active (show on dashboard)',
+        'announcements.field_published_at': 'Publish At (optional)',
+        'announcements.field_expires_at': 'Expires At (optional)',
+        'announcements.active': 'Active',
+        'announcements.inactive': 'Inactive',
+        'announcements.all_types': 'All Types',
+        'announcements.search_placeholder': 'Search title or content...',
     },
     id: {
         // Navigation
         'nav.platform': 'Platform',
         'nav.access_control': 'Kontrol Akses',
         'nav.dashboard': 'Dasbor',
+        'nav.announcements': 'Pengumuman',
         'nav.users': 'Manajemen Pengguna',
         'nav.roles': 'Manajemen Role',
         'nav.permissions': 'Manajemen Izin',
@@ -474,6 +498,27 @@ const messages: Record<Locale, Record<string, string>> = {
         'laravel_logs.view_detail': 'Lihat Detail',
         'laravel_logs.no_files': 'Tidak ada file log di storage/logs.',
         'laravel_logs.no_entries': 'Tidak ada entri log ditemukan.',
+
+        // Announcements
+        'announcements.title': 'Pengumuman',
+        'announcements.description':
+            'Buat dan kelola pengumuman yang tampil di halaman dasbor.',
+        'announcements.add': 'Tambah Pengumuman',
+        'announcements.edit': 'Ubah Pengumuman',
+        'announcements.create_desc':
+            'Buat pengumuman baru untuk ditampilkan di dasbor.',
+        'announcements.edit_desc': 'Perbarui isi dan status pengumuman.',
+        'announcements.field_title': 'Judul',
+        'announcements.field_content': 'Isi Pengumuman',
+        'announcements.field_type': 'Tipe',
+        'announcements.field_status': 'Status',
+        'announcements.field_active': 'Aktif (tampilkan di dasbor)',
+        'announcements.field_published_at': 'Mulai Tayang (opsional)',
+        'announcements.field_expires_at': 'Berakhir Pada (opsional)',
+        'announcements.active': 'Aktif',
+        'announcements.inactive': 'Nonaktif',
+        'announcements.all_types': 'Semua Tipe',
+        'announcements.search_placeholder': 'Cari judul atau isi pengumuman...',
     },
 };
 

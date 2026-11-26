@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
@@ -16,7 +18,14 @@ Route::inertia('/', 'Welcome')->name('home');
 Route::post('locale', [LocaleController::class, 'update'])->name('locale.update');
 
 Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('announcements')->name('announcements.')->group(function () {
+        Route::get('/', [AnnouncementController::class, 'index'])->middleware('permission:announcements.view')->name('index');
+        Route::post('/', [AnnouncementController::class, 'store'])->middleware('permission:announcements.create')->name('store');
+        Route::put('/{announcement}', [AnnouncementController::class, 'update'])->middleware('permission:announcements.edit')->name('update');
+        Route::delete('/{announcement}', [AnnouncementController::class, 'destroy'])->middleware('permission:announcements.delete')->name('destroy');
+    });
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserManagementController::class, 'index'])->middleware('permission:users.view')->name('index');

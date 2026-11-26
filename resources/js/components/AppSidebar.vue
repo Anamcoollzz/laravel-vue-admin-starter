@@ -9,6 +9,7 @@ import {
     FolderOpen,
     KeyRound,
     LayoutGrid,
+    Megaphone,
     ShieldCheck,
     Table2,
     Users,
@@ -46,6 +47,12 @@ const { can } = usePermission();
 
 const accessControlNavItems = computed<NavItem[]>(() =>
     [
+        {
+            title: t('nav.announcements'),
+            href: '/app/announcements',
+            icon: Megaphone,
+            permission: 'announcements.view',
+        },
         {
             title: t('nav.users'),
             href: '/app/users',
