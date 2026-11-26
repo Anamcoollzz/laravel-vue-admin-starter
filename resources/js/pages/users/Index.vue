@@ -3,6 +3,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
 import { ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
+import ExcelActions from '@/components/ExcelActions.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -161,10 +162,17 @@ const deleteUser = (user: UserRow) => {
                 </p>
             </div>
 
-            <Button @click="openCreateDialog">
-                <Plus class="mr-2 size-4" />
-                {{ t('users.add') }}
-            </Button>
+            <div class="flex flex-wrap items-center gap-2">
+                <ExcelActions
+                    export-url="/app/users/export"
+                    import-url="/app/users/import"
+                    columns-hint="name, email, password, roles"
+                />
+                <Button @click="openCreateDialog">
+                    <Plus class="mr-2 size-4" />
+                    {{ t('users.add') }}
+                </Button>
+            </div>
         </div>
 
         <div class="flex items-center gap-2">

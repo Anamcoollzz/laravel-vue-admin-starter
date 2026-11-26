@@ -9,6 +9,9 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\SimpleExcel\SimpleExcelReader;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoleManagementController extends Controller
 {
@@ -80,6 +83,64 @@ class RoleManagementController extends Controller
     public function destroy(Role $role): RedirectResponse
     {
         $role->delete();
+
+        return back();
+    }
+
+    public function export(): BinaryFileResponse
+    {
+        $tempPath = storage_path('app/roles-export-'.uniqid().'.xlsx');
+
+        $writer = SimpleExcelWriter::create($tempPath);
+
+        Role::query()
+            ->with('permissions:id,name')
+            ->orderBy('name')
+            ->get()
+            ->each(function (Role $role) use ($writer): void {
+                $writer->addRow([
+                    'name' => $role->name,
+                    'permissions' => $role->permissions->pluck('name')->implode(', '),
+                ]);
+            });
+
+        $writer->close();
+
+        return response()->download($tempPath, 'roles.xlsx')->deleteFileAfterSend(true);
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,csv,txt', 'max:5120'],
+        ]);
+
+        $file = $request->file('file');
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        SimpleExcelReader::create($file->getRealPath(), $extension)
+            ->getRows()
+            ->each(function (array $row): void {
+                $name = trim((string) ($row['name'] ?? ''));
+
+                if ($name === '') {
+                    return;
+                }
+
+                $role = Role::findOrCreate($name, 'web');
+
+                $permissionsRaw = trim((string) ($row['permissions'] ?? ''));
+
+                if ($permissionsRaw !== '') {
+                    $permissionNames = array_filter(array_map('trim', explode(',', $permissionsRaw)));
+
+                    foreach ($permissionNames as $permissionName) {
+                        Permission::findOrCreate($permissionName, 'web');
+                    }
+
+                    $role->syncPermissions($permissionNames);
+                }
+            });
 
         return back();
     }

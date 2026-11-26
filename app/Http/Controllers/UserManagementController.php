@@ -9,6 +9,9 @@ use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
+use Spatie\SimpleExcel\SimpleExcelReader;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserManagementController extends Controller
 {
@@ -100,6 +103,72 @@ class UserManagementController extends Controller
         }
 
         $user->delete();
+
+        return back();
+    }
+
+    public function export(): BinaryFileResponse
+    {
+        $tempPath = storage_path('app/users-export-'.uniqid().'.xlsx');
+
+        $writer = SimpleExcelWriter::create($tempPath);
+
+        User::query()
+            ->with('roles:id,name')
+            ->orderBy('id')
+            ->chunk(200, function ($users) use ($writer): void {
+                foreach ($users as $user) {
+                    $writer->addRow([
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'roles' => $user->roles->pluck('name')->implode(', '),
+                    ]);
+                }
+            });
+
+        $writer->close();
+
+        return response()->download($tempPath, 'users.xlsx')->deleteFileAfterSend(true);
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,csv,txt', 'max:5120'],
+        ]);
+
+        $file = $request->file('file');
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        SimpleExcelReader::create($file->getRealPath(), $extension)
+            ->getRows()
+            ->each(function (array $row): void {
+                $name = trim((string) ($row['name'] ?? ''));
+                $email = trim((string) ($row['email'] ?? ''));
+
+                if ($name === '' || $email === '') {
+                    return;
+                }
+
+                $password = trim((string) ($row['password'] ?? ''));
+
+                $user = User::query()->updateOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $name,
+                        'password' => $password !== '' ? $password : 'password',
+                        'email_verified_at' => now(),
+                    ],
+                );
+
+                $rolesRaw = trim((string) ($row['roles'] ?? ''));
+
+                if ($rolesRaw !== '') {
+                    $roleNames = array_filter(array_map('trim', explode(',', $rolesRaw)));
+                    $validRoles = Role::query()->whereIn('name', $roleNames)->pluck('name')->all();
+                    $user->syncRoles($validRoles);
+                }
+            });
 
         return back();
     }

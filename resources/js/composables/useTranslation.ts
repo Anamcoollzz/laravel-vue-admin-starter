@@ -36,6 +36,11 @@ const messages: Record<Locale, Record<string, string>> = {
         'common.showing': 'Showing',
         'common.of': 'of',
         'common.entries': 'entries',
+        'common.export': 'Export Excel',
+        'common.import': 'Import Excel',
+        'common.importing': 'Importing...',
+        'common.import_file': 'Excel / CSV File',
+        'common.import_columns': 'Expected columns',
 
         // Users
         'users.title': 'User Management',
@@ -103,6 +108,11 @@ const messages: Record<Locale, Record<string, string>> = {
         'common.showing': 'Menampilkan',
         'common.of': 'dari',
         'common.entries': 'data',
+        'common.export': 'Ekspor Excel',
+        'common.import': 'Impor Excel',
+        'common.importing': 'Mengimpor...',
+        'common.import_file': 'File Excel / CSV',
+        'common.import_columns': 'Kolom yang didukung',
 
         // Users
         'users.title': 'Manajemen Pengguna',

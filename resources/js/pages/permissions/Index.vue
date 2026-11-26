@@ -3,6 +3,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
 import { ref, watch } from 'vue';
 import InputError from '@/components/InputError.vue';
+import ExcelActions from '@/components/ExcelActions.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -143,10 +144,17 @@ const deletePermission = (permission: PermissionRow) => {
                 </p>
             </div>
 
-            <Button @click="openCreateDialog">
-                <Plus class="mr-2 size-4" />
-                {{ t('permissions.add') }}
-            </Button>
+            <div class="flex flex-wrap items-center gap-2">
+                <ExcelActions
+                    export-url="/app/permissions/export"
+                    import-url="/app/permissions/import"
+                    columns-hint="name, guard_name"
+                />
+                <Button @click="openCreateDialog">
+                    <Plus class="mr-2 size-4" />
+                    {{ t('permissions.add') }}
+                </Button>
+            </div>
         </div>
 
         <div class="flex items-center gap-2">
