@@ -55,6 +55,10 @@
             "Composer\\Config::disableProcessTimeout",
             "@php artisan dev"
         ],
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan serve --port=8001"
+        ],
         "lint": [
             "pint --parallel"
         ],
