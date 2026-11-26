@@ -13,6 +13,7 @@ import {
     Megaphone,
     MessageSquare,
     MonitorSmartphone,
+    ShieldBan,
     ShieldCheck,
     SlidersHorizontal,
     Table2,
@@ -79,6 +80,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: '/app/login-history',
             icon: History,
             permission: 'login_history.view',
+        },
+        {
+            title: t('nav.ip_blacklist'),
+            href: '/app/ip-blacklist',
+            icon: ShieldBan,
+            permission: 'ip_blacklist.view',
         },
         {
             title: t('nav.roles'),

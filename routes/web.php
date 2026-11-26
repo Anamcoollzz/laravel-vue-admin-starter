@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
+use App\Http\Controllers\IpBlacklistController;
 use App\Http\Controllers\LaravelLogViewerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LoginHistoryController;
@@ -127,6 +128,13 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::get('/', [LoginHistoryController::class, 'index'])->middleware('permission:login_history.view')->name('index');
         Route::delete('/clear', [LoginHistoryController::class, 'clear'])->middleware('permission:login_history.delete')->name('clear');
         Route::delete('/{loginHistory}', [LoginHistoryController::class, 'destroy'])->middleware('permission:login_history.delete')->name('destroy');
+    });
+
+    Route::prefix('ip-blacklist')->name('ip-blacklist.')->group(function () {
+        Route::get('/', [IpBlacklistController::class, 'index'])->middleware('permission:ip_blacklist.view')->name('index');
+        Route::post('/', [IpBlacklistController::class, 'store'])->middleware('permission:ip_blacklist.create')->name('store');
+        Route::put('/{ipBlacklist}', [IpBlacklistController::class, 'update'])->middleware('permission:ip_blacklist.edit')->name('update');
+        Route::delete('/{ipBlacklist}', [IpBlacklistController::class, 'destroy'])->middleware('permission:ip_blacklist.delete')->name('destroy');
     });
 });
 

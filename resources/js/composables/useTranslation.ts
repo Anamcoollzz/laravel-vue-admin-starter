@@ -14,6 +14,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.users': 'User Management',
         'nav.sessions': 'User Sessions',
         'nav.login_history': 'Login History',
+        'nav.ip_blacklist': 'IP Blacklist',
         'nav.roles': 'Role Management',
         'nav.permissions': 'Permission Management',
         'nav.backups': 'Database Backup',
@@ -355,6 +356,23 @@ const messages: Record<Locale, Record<string, string>> = {
             'Are you sure you want to delete all login history?',
         'login_history.search_placeholder':
             'Search user, email, IP, or browser...',
+
+        // IP Blacklist
+        'ip_blacklist.title': 'IP Blacklist',
+        'ip_blacklist.description':
+            'Block suspicious IP addresses from accessing the application.',
+        'ip_blacklist.your_ip': 'Your IP',
+        'ip_blacklist.add': 'Block IP',
+        'ip_blacklist.edit': 'Edit Blocked IP',
+        'ip_blacklist.create_desc':
+            'Add an IP address to block from accessing the app.',
+        'ip_blacklist.edit_desc': 'Update IP block details and status.',
+        'ip_blacklist.ip_address': 'IP Address',
+        'ip_blacklist.reason': 'Reason',
+        'ip_blacklist.expires_at': 'Expires At (optional)',
+        'ip_blacklist.permanent': 'Permanent',
+        'ip_blacklist.active_label': 'Active (block immediately)',
+        'ip_blacklist.search_placeholder': 'Search IP address or reason...',
     },
     id: {
         // Navigation
@@ -366,6 +384,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.users': 'Manajemen Pengguna',
         'nav.sessions': 'Sesi Pengguna',
         'nav.login_history': 'Riwayat Login',
+        'nav.ip_blacklist': 'Blacklist IP',
         'nav.roles': 'Manajemen Role',
         'nav.permissions': 'Manajemen Izin',
         'nav.backups': 'Backup Database',
@@ -706,6 +725,23 @@ const messages: Record<Locale, Record<string, string>> = {
             'Apakah Anda yakin ingin menghapus semua riwayat login?',
         'login_history.search_placeholder':
             'Cari user, email, IP, atau browser...',
+
+        // IP Blacklist
+        'ip_blacklist.title': 'Blacklist IP',
+        'ip_blacklist.description':
+            'Blokir alamat IP mencurigakan agar tidak dapat mengakses aplikasi.',
+        'ip_blacklist.your_ip': 'IP Anda',
+        'ip_blacklist.add': 'Blokir IP',
+        'ip_blacklist.edit': 'Ubah Blokir IP',
+        'ip_blacklist.create_desc':
+            'Tambahkan alamat IP untuk diblokir dari aplikasi.',
+        'ip_blacklist.edit_desc': 'Perbarui detail dan status pemblokiran IP.',
+        'ip_blacklist.ip_address': 'Alamat IP',
+        'ip_blacklist.reason': 'Alasan',
+        'ip_blacklist.expires_at': 'Berakhir Pada (opsional)',
+        'ip_blacklist.permanent': 'Permanen',
+        'ip_blacklist.active_label': 'Aktif (langsung blokir)',
+        'ip_blacklist.search_placeholder': 'Cari alamat IP atau alasan...',
     },
 };
 

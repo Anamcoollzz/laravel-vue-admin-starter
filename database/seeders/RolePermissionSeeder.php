@@ -51,6 +51,10 @@ class RolePermissionSeeder extends Seeder
             'sessions.delete',
             'login_history.view',
             'login_history.delete',
+            'ip_blacklist.view',
+            'ip_blacklist.create',
+            'ip_blacklist.edit',
+            'ip_blacklist.delete',
         ];
 
         foreach ($permissions as $permission) {

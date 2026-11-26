@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckIpBlacklistMiddleware;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\LogRequestMiddleware;
@@ -22,13 +23,18 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
-        $middleware->web(append: [
-            SetLocale::class,
-            HandleAppearance::class,
-            HandleInertiaRequests::class,
-            AddLinkHeadersForPreloadedAssets::class,
-            LogRequestMiddleware::class,
-        ]);
+        $middleware->web(
+            prepend: [
+                CheckIpBlacklistMiddleware::class,
+            ],
+            append: [
+                SetLocale::class,
+                HandleAppearance::class,
+                HandleInertiaRequests::class,
+                AddLinkHeadersForPreloadedAssets::class,
+                LogRequestMiddleware::class,
+            ],
+        );
 
         $middleware->alias([
             'role' => RoleMiddleware::class,
