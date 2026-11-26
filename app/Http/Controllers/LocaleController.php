@@ -8,6 +8,9 @@ use Illuminate\Validation\Rule;
 
 class LocaleController extends Controller
 {
+    /**
+     * Store the selected application locale (en/id) in the session and redirect back.
+     */
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([

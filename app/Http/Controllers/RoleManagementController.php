@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoleManagementController extends Controller
 {
+    /**
+     * Display a paginated list of roles with their permissions and user counts, filtered by an optional name search.
+     */
     public function index(Request $request): Response
     {
         $search = $request->string('search')->trim()->value();
@@ -47,6 +50,9 @@ class RoleManagementController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created role and sync the selected permissions.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -65,6 +71,9 @@ class RoleManagementController extends Controller
         return back();
     }
 
+    /**
+     * Update the given role's name and sync the selected permissions.
+     */
     public function update(Request $request, Role $role): RedirectResponse
     {
         $validated = $request->validate([
@@ -82,6 +91,9 @@ class RoleManagementController extends Controller
         return back();
     }
 
+    /**
+     * Delete the given role.
+     */
     public function destroy(Role $role): RedirectResponse
     {
         $role->delete();
@@ -89,11 +101,17 @@ class RoleManagementController extends Controller
         return back();
     }
 
+    /**
+     * Download all roles with their permissions as an Excel file.
+     */
     public function export(): BinaryFileResponse
     {
         return Excel::download(new RolesExport, 'roles.xlsx');
     }
 
+    /**
+     * Download a sample Excel template for importing roles.
+     */
     public function template(): BinaryFileResponse
     {
         return Excel::download(new ImportTemplateExport(
@@ -105,6 +123,9 @@ class RoleManagementController extends Controller
         ), 'roles-import-template.xlsx');
     }
 
+    /**
+     * Import roles from an uploaded Excel/CSV file, creating any missing permissions and syncing them.
+     */
     public function import(Request $request): RedirectResponse
     {
         $request->validate([

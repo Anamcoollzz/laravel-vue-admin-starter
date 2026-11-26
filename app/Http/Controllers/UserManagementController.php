@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserManagementController extends Controller
 {
+    /**
+     * Display a paginated list of users with their roles, filtered by an optional name/email search.
+     */
     public function index(Request $request): Response
     {
         $search = $request->string('search')->trim()->value();
@@ -49,6 +52,9 @@ class UserManagementController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created user (marked as email-verified) and sync the selected roles.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -71,6 +77,9 @@ class UserManagementController extends Controller
         return back();
     }
 
+    /**
+     * Update the given user's profile, optionally change the password, and sync the selected roles.
+     */
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
@@ -96,6 +105,9 @@ class UserManagementController extends Controller
         return back();
     }
 
+    /**
+     * Delete the given user, preventing the authenticated user from deleting their own account.
+     */
     public function destroy(Request $request, User $user): RedirectResponse
     {
         if ($request->user()?->is($user)) {
@@ -109,11 +121,17 @@ class UserManagementController extends Controller
         return back();
     }
 
+    /**
+     * Download all users with their roles as an Excel file.
+     */
     public function export(): BinaryFileResponse
     {
         return Excel::download(new UsersExport, 'users.xlsx');
     }
 
+    /**
+     * Download a sample Excel template for importing users.
+     */
     public function template(): BinaryFileResponse
     {
         return Excel::download(new ImportTemplateExport(
@@ -125,6 +143,9 @@ class UserManagementController extends Controller
         ), 'users-import-template.xlsx');
     }
 
+    /**
+     * Import users from an uploaded Excel/CSV file, creating or updating them by email.
+     */
     public function import(Request $request): RedirectResponse
     {
         $request->validate([

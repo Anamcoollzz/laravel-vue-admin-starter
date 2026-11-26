@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PermissionManagementController extends Controller
 {
+    /**
+     * Display a paginated list of permissions with their assigned role counts, filtered by an optional name search.
+     */
     public function index(Request $request): Response
     {
         $search = $request->string('search')->trim()->value();
@@ -44,6 +47,9 @@ class PermissionManagementController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created permission for the web guard.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -58,6 +64,9 @@ class PermissionManagementController extends Controller
         return back();
     }
 
+    /**
+     * Update the given permission's name.
+     */
     public function update(Request $request, Permission $permission): RedirectResponse
     {
         $validated = $request->validate([
@@ -71,6 +80,9 @@ class PermissionManagementController extends Controller
         return back();
     }
 
+    /**
+     * Delete the given permission.
+     */
     public function destroy(Permission $permission): RedirectResponse
     {
         $permission->delete();
@@ -78,11 +90,17 @@ class PermissionManagementController extends Controller
         return back();
     }
 
+    /**
+     * Download all permissions as an Excel file.
+     */
     public function export(): BinaryFileResponse
     {
         return Excel::download(new PermissionsExport, 'permissions.xlsx');
     }
 
+    /**
+     * Download a sample Excel template for importing permissions.
+     */
     public function template(): BinaryFileResponse
     {
         return Excel::download(new ImportTemplateExport(
@@ -94,6 +112,9 @@ class PermissionManagementController extends Controller
         ), 'permissions-import-template.xlsx');
     }
 
+    /**
+     * Import permissions from an uploaded Excel/CSV file, skipping ones that already exist.
+     */
     public function import(Request $request): RedirectResponse
     {
         $request->validate([
