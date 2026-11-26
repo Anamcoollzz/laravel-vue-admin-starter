@@ -14,6 +14,7 @@ use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\UserSessionController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
@@ -113,6 +114,12 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::put('/smtp', [AppSettingController::class, 'updateSmtp'])->middleware('permission:settings.edit')->name('smtp');
         Route::put('/privacy', [AppSettingController::class, 'updatePrivacy'])->middleware('permission:settings.edit')->name('privacy');
         Route::put('/security', [AppSettingController::class, 'updateSecurity'])->middleware('permission:settings.edit')->name('security');
+    });
+
+    Route::prefix('sessions')->name('sessions.')->group(function () {
+        Route::get('/', [UserSessionController::class, 'index'])->middleware('permission:sessions.view')->name('index');
+        Route::delete('/others', [UserSessionController::class, 'destroyOthers'])->middleware('permission:sessions.delete')->name('destroy-others');
+        Route::delete('/{sessionId}', [UserSessionController::class, 'destroy'])->middleware('permission:sessions.delete')->name('destroy');
     });
 });
 

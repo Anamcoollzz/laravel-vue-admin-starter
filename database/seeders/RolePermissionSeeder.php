@@ -47,6 +47,8 @@ class RolePermissionSeeder extends Seeder
             'announcements.delete',
             'settings.view',
             'settings.edit',
+            'sessions.view',
+            'sessions.delete',
         ];
 
         foreach ($permissions as $permission) {

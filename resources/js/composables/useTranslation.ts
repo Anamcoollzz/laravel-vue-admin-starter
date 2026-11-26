@@ -12,6 +12,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.messages': 'Messages',
         'nav.announcements': 'Announcements',
         'nav.users': 'User Management',
+        'nav.sessions': 'User Sessions',
         'nav.roles': 'Role Management',
         'nav.permissions': 'Permission Management',
         'nav.backups': 'Database Backup',
@@ -324,6 +325,21 @@ const messages: Record<Locale, Record<string, string>> = {
         'app_settings.password_uncompromised_desc':
             'Reject passwords that have appeared in data breaches',
         'app_settings.session_lifetime': 'Session Lifetime (minutes)',
+
+        // User Sessions
+        'sessions.title': 'User Session Management',
+        'sessions.description':
+            'Monitor and revoke active user login sessions across devices.',
+        'sessions.revoke_others': 'Revoke All Other Sessions',
+        'sessions.confirm_revoke_others':
+            'Are you sure you want to force-logout all other active sessions?',
+        'sessions.revoke': 'Revoke Session',
+        'sessions.confirm_revoke':
+            'Are you sure you want to force-logout this session?',
+        'sessions.search_placeholder': 'Search user name, email, or IP...',
+        'sessions.device': 'Device & Browser',
+        'sessions.last_activity': 'Last Activity',
+        'sessions.current': 'Current Session',
     },
     id: {
         // Navigation
@@ -333,6 +349,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.messages': 'Pesan',
         'nav.announcements': 'Pengumuman',
         'nav.users': 'Manajemen Pengguna',
+        'nav.sessions': 'Sesi Pengguna',
         'nav.roles': 'Manajemen Role',
         'nav.permissions': 'Manajemen Izin',
         'nav.backups': 'Backup Database',
@@ -644,6 +661,21 @@ const messages: Record<Locale, Record<string, string>> = {
         'app_settings.password_uncompromised_desc':
             'Tolak kata sandi yang pernah bocor di kebocoran data',
         'app_settings.session_lifetime': 'Masa Berlaku Sesi (menit)',
+
+        // User Sessions
+        'sessions.title': 'Manajemen Sesi Pengguna',
+        'sessions.description':
+            'Pantau dan akhiri sesi login pengguna yang sedang aktif di berbagai perangkat.',
+        'sessions.revoke_others': 'Akhiri Semua Sesi Lain',
+        'sessions.confirm_revoke_others':
+            'Apakah Anda yakin ingin mengeluarkan paksa semua sesi aktif lainnya?',
+        'sessions.revoke': 'Akhiri Sesi',
+        'sessions.confirm_revoke':
+            'Apakah Anda yakin ingin mengeluarkan paksa sesi ini?',
+        'sessions.search_placeholder': 'Cari nama user, email, atau IP...',
+        'sessions.device': 'Perangkat & Browser',
+        'sessions.last_activity': 'Aktivitas Terakhir',
+        'sessions.current': 'Sesi Saat Ini',
     },
 };
 

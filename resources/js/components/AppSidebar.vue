@@ -11,6 +11,7 @@ import {
     LayoutGrid,
     Megaphone,
     MessageSquare,
+    MonitorSmartphone,
     ShieldCheck,
     SlidersHorizontal,
     Table2,
@@ -65,6 +66,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: '/app/users',
             icon: Users,
             permission: 'users.view',
+        },
+        {
+            title: t('nav.sessions'),
+            href: '/app/sessions',
+            icon: MonitorSmartphone,
+            permission: 'sessions.view',
         },
         {
             title: t('nav.roles'),
