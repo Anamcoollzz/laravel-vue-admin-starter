@@ -54,7 +54,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'User Management',
-                href: '/users',
+                href: '/app/users',
             },
         ],
     },
@@ -70,7 +70,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/users',
+            '/app/users',
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -118,14 +118,14 @@ const toggleRole = (roleName: string) => {
 
 const submitForm = () => {
     if (editingUser.value) {
-        form.put(`/users/${editingUser.value.id}`, {
+        form.put(`/app/users/${editingUser.value.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
             },
         });
     } else {
-        form.post('/users', {
+        form.post('/app/users', {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -139,7 +139,7 @@ const deleteUser = (user: UserRow) => {
         return;
     }
 
-    router.delete(`/users/${user.id}`, {
+    router.delete(`/app/users/${user.id}`, {
         preserveScroll: true,
     });
 };

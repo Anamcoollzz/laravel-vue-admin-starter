@@ -54,7 +54,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'Role Management',
-                href: '/roles',
+                href: '/app/roles',
             },
         ],
     },
@@ -70,7 +70,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/roles',
+            '/app/roles',
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -112,14 +112,14 @@ const togglePermission = (permissionName: string) => {
 
 const submitForm = () => {
     if (editingRole.value) {
-        form.put(`/roles/${editingRole.value.id}`, {
+        form.put(`/app/roles/${editingRole.value.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
             },
         });
     } else {
-        form.post('/roles', {
+        form.post('/app/roles', {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -133,7 +133,7 @@ const deleteRole = (role: RoleRow) => {
         return;
     }
 
-    router.delete(`/roles/${role.id}`, {
+    router.delete(`/app/roles/${role.id}`, {
         preserveScroll: true,
     });
 };

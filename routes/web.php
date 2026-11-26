@@ -10,7 +10,7 @@ Route::inertia('/', 'Welcome')->name('home');
 
 Route::post('locale', [LocaleController::class, 'update'])->name('locale.update');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 
     Route::prefix('users')->name('users.')->group(function () {

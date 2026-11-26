@@ -39,17 +39,17 @@ const mainNavItems = computed<NavItem[]>(() => [
 const accessControlNavItems = computed<NavItem[]>(() => [
     {
         title: t('nav.users'),
-        href: '/users',
+        href: '/app/users',
         icon: Users,
     },
     {
         title: t('nav.roles'),
-        href: '/roles',
+        href: '/app/roles',
         icon: ShieldCheck,
     },
     {
         title: t('nav.permissions'),
-        href: '/permissions',
+        href: '/app/permissions',
         icon: KeyRound,
     },
 ]);

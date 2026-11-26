@@ -53,7 +53,7 @@ defineOptions({
         breadcrumbs: [
             {
                 title: 'Permission Management',
-                href: '/permissions',
+                href: '/app/permissions',
             },
         ],
     },
@@ -69,7 +69,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/permissions',
+            '/app/permissions',
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -100,14 +100,14 @@ const openEditDialog = (permission: PermissionRow) => {
 
 const submitForm = () => {
     if (editingPermission.value) {
-        form.put(`/permissions/${editingPermission.value.id}`, {
+        form.put(`/app/permissions/${editingPermission.value.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
             },
         });
     } else {
-        form.post('/permissions', {
+        form.post('/app/permissions', {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -121,7 +121,7 @@ const deletePermission = (permission: PermissionRow) => {
         return;
     }
 
-    router.delete(`/permissions/${permission.id}`, {
+    router.delete(`/app/permissions/${permission.id}`, {
         preserveScroll: true,
     });
 };
