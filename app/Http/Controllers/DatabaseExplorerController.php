@@ -45,15 +45,24 @@ class DatabaseExplorerController extends Controller
     {
         $this->ensureTableExists($table);
 
+        $indexes = Schema::getIndexes($table);
+
         $columns = collect(Schema::getColumns($table))
-            ->map(fn (array $col): array => [
-                'name' => (string) $col['name'],
-                'type_name' => (string) ($col['type_name'] ?? $col['type'] ?? ''),
-                'type' => (string) ($col['type'] ?? ''),
-                'nullable' => (bool) ($col['nullable'] ?? false),
-                'default' => $col['default'] !== null ? (string) $col['default'] : null,
-                'auto_increment' => (bool) ($col['auto_increment'] ?? false),
-            ])
+            ->map(function (array $col) use ($indexes): array {
+                $name = (string) $col['name'];
+                $indexMeta = $this->findColumnIndex($indexes, $name);
+
+                return [
+                    'name' => $name,
+                    'type_name' => (string) ($col['type_name'] ?? $col['type'] ?? ''),
+                    'type' => (string) ($col['type'] ?? ''),
+                    'nullable' => (bool) ($col['nullable'] ?? false),
+                    'default' => $col['default'] !== null ? (string) $col['default'] : null,
+                    'auto_increment' => (bool) ($col['auto_increment'] ?? false),
+                    'index_type' => $indexMeta['type'],
+                    'index_name' => $indexMeta['name'],
+                ];
+            })
             ->values()
             ->all();
 
@@ -88,40 +97,114 @@ class DatabaseExplorerController extends Controller
     }
 
     /**
-     * Rename an existing column on the specified database table.
+     * Update an existing column's name, data type, nullability, and index/unique constraint.
      */
-    public function renameColumn(Request $request, string $table, string $column): RedirectResponse
+    public function updateColumn(Request $request, string $table, string $column): RedirectResponse
     {
         $this->ensureTableExists($table);
         $this->ensureColumnExists($table, $column);
 
+        $allowedTypes = [
+            'string',
+            'text',
+            'integer',
+            'bigInteger',
+            'float',
+            'decimal',
+            'boolean',
+            'date',
+            'datetime',
+            'timestamp',
+            'json',
+        ];
+
         $validated = $request->validate([
             'new_name' => ['required', 'string', 'max:64', 'regex:/^[a-zA-Z_][a-zA-Z0-9_]*$/'],
+            'type' => ['nullable', 'string', 'in:'.implode(',', $allowedTypes)],
+            'nullable' => ['nullable', 'boolean'],
+            'index' => ['nullable', 'string', 'in:none,index,unique'],
         ]);
 
         $newName = $validated['new_name'];
+        $columns = Schema::getColumns($table);
+        $primaryKey = $this->detectPrimaryKey($table, $columns);
+        $isPrimary = $primaryKey === $column;
 
-        if ($newName === $column) {
-            return back();
-        }
-
-        if (Schema::hasColumn($table, $newName)) {
+        if ($newName !== $column && Schema::hasColumn($table, $newName)) {
             return back()->withErrors([
                 'new_name' => "Column '{$newName}' already exists.",
             ]);
         }
 
         try {
-            Schema::table($table, function (Blueprint $blueprint) use ($column, $newName): void {
-                $blueprint->renameColumn($column, $newName);
-            });
+            $targetName = $column;
+
+            if ($newName !== $column) {
+                Schema::table($table, function (Blueprint $blueprint) use ($column, $newName): void {
+                    $blueprint->renameColumn($column, $newName);
+                });
+                $targetName = $newName;
+            }
+
+            if (! $isPrimary && ! empty($validated['type'])) {
+                $type = $validated['type'];
+                $nullable = (bool) ($validated['nullable'] ?? false);
+
+                Schema::table($table, function (Blueprint $blueprint) use ($targetName, $type, $nullable): void {
+                    $colDef = match ($type) {
+                        'string' => $blueprint->string($targetName),
+                        'text' => $blueprint->text($targetName),
+                        'integer' => $blueprint->integer($targetName),
+                        'bigInteger' => $blueprint->bigInteger($targetName),
+                        'float' => $blueprint->float($targetName),
+                        'decimal' => $blueprint->decimal($targetName, 12, 2),
+                        'boolean' => $blueprint->boolean($targetName),
+                        'date' => $blueprint->date($targetName),
+                        'datetime' => $blueprint->dateTime($targetName),
+                        'timestamp' => $blueprint->timestamp($targetName),
+                        'json' => $blueprint->json($targetName),
+                        default => $blueprint->string($targetName),
+                    };
+
+                    $colDef->nullable($nullable)->change();
+                });
+            }
+
+            if (! $isPrimary && isset($validated['index'])) {
+                $desiredIndex = $validated['index'];
+                $currentIndex = $this->findColumnIndex(Schema::getIndexes($table), $targetName);
+                $currentType = $currentIndex['type'] ?? 'none';
+
+                if ($desiredIndex !== $currentType) {
+                    if ($currentIndex['name'] !== null && $currentIndex['type'] !== 'primary') {
+                        $indexName = $currentIndex['name'];
+                        Schema::table($table, function (Blueprint $blueprint) use ($indexName, $currentIndex): void {
+                            if ($currentIndex['type'] === 'unique') {
+                                $blueprint->dropUnique($indexName);
+                            } else {
+                                $blueprint->dropIndex($indexName);
+                            }
+                        });
+                    }
+
+                    if ($desiredIndex === 'index') {
+                        Schema::table($table, function (Blueprint $blueprint) use ($targetName): void {
+                            $blueprint->index($targetName);
+                        });
+                    } elseif ($desiredIndex === 'unique') {
+                        Schema::table($table, function (Blueprint $blueprint) use ($targetName): void {
+                            $blueprint->unique($targetName);
+                        });
+                    }
+                }
+            }
         } catch (Throwable $e) {
             return back()->withErrors([
                 'new_name' => $e->getMessage(),
             ]);
         }
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Column renamed.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Column updated.')]);
 
         return back();
     }
@@ -266,5 +349,34 @@ class DatabaseExplorerController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Find single-column index metadata (primary, unique, or index) for a column.
+     *
+     * @param  array<int, array<string, mixed>>  $indexes
+     * @return array{type: string|null, name: string|null}
+     */
+    private function findColumnIndex(array $indexes, string $column): array
+    {
+        foreach ($indexes as $index) {
+            $cols = $index['columns'] ?? [];
+
+            if (count($cols) !== 1 || (string) $cols[0] !== $column) {
+                continue;
+            }
+
+            if (! empty($index['primary'])) {
+                return ['type' => 'primary', 'name' => (string) ($index['name'] ?? '')];
+            }
+
+            if (! empty($index['unique'])) {
+                return ['type' => 'unique', 'name' => (string) ($index['name'] ?? '')];
+            }
+
+            return ['type' => 'index', 'name' => (string) ($index['name'] ?? '')];
+        }
+
+        return ['type' => null, 'name' => null];
     }
 }

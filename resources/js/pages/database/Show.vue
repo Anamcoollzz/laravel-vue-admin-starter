@@ -33,6 +33,8 @@ type ColumnInfo = {
     nullable: boolean;
     default: string | null;
     auto_increment: boolean;
+    index_type: 'primary' | 'unique' | 'index' | null;
+    index_name: string | null;
 };
 
 type PaginationLink = {
@@ -91,18 +93,58 @@ watch(search, (value) => {
     }, 300);
 });
 
-// Rename column dialog
+const fieldTypeOptions = [
+    'string',
+    'text',
+    'integer',
+    'bigInteger',
+    'float',
+    'decimal',
+    'boolean',
+    'date',
+    'datetime',
+    'timestamp',
+    'json',
+] as const;
+
+const inferFieldType = (rawType: string): string => {
+    const t = rawType.toLowerCase();
+
+    if (t.includes('bigint')) return 'bigInteger';
+    if (t.includes('int')) return 'integer';
+    if (t.includes('bool')) return 'boolean';
+    if (t.includes('decimal') || t.includes('numeric')) return 'decimal';
+    if (t.includes('float') || t.includes('double') || t.includes('real')) return 'float';
+    if (t.includes('datetime')) return 'datetime';
+    if (t.includes('timestamp')) return 'timestamp';
+    if (t === 'date') return 'date';
+    if (t.includes('json')) return 'json';
+    if (t.includes('text') || t.includes('clob')) return 'text';
+
+    return 'string';
+};
+
+// Edit column dialog
 const isRenameOpen = ref(false);
-const renamingColumn = ref<string | null>(null);
+const renamingColumn = ref<ColumnInfo | null>(null);
 const renameForm = useForm({
     new_name: '',
+    type: 'string',
+    nullable: false,
+    index: 'none' as 'none' | 'index' | 'unique',
 });
 
-const openRenameDialog = (columnName: string) => {
-    renamingColumn.value = columnName;
+const openRenameDialog = (col: ColumnInfo) => {
+    renamingColumn.value = col;
     renameForm.reset();
     renameForm.clearErrors();
-    renameForm.new_name = columnName;
+    renameForm.new_name = col.name;
+    renameForm.type = inferFieldType(col.type || col.type_name);
+    renameForm.nullable = col.nullable;
+    renameForm.index =
+        col.index_type === 'unique' || col.index_type === 'index'
+            ? col.index_type
+            : 'none';
     isRenameOpen.value = true;
 };
 
@@ -112,7 +154,7 @@ const submitRename = () => {
     }
 
     renameForm.patch(
-        `/app/database/${props.table}/columns/${encodeURIComponent(renamingColumn.value)}`,
+        `/app/database/${props.table}/columns/${encodeURIComponent(renamingColumn.value.name)}`,
         {
             preserveScroll: true,
             onSuccess: () => {
@@ -441,6 +483,9 @@ const formatCell = (value: unknown): string => {
                             <th class="px-4 py-3 font-medium">
                                 {{ t('database.default') }}
                             </th>
+                            <th class="px-4 py-3 font-medium">
+                                {{ t('database.index') }}
+                            </th>
                             <th class="px-4 py-3 text-right font-medium">
                                 {{ t('common.actions') }}
                             </th>
@@ -476,6 +521,35 @@ const formatCell = (value: unknown): string => {
                             <td class="px-4 py-3 font-mono text-xs text-muted-foreground">
                                 {{ col.default ?? '-' }}
                             </td>
+                            <td class="px-4 py-3">
+                                <Badge
+                                    v-if="col.index_type === 'primary'"
+                                    variant="default"
+                                    class="uppercase"
+                                >
+                                    PRIMARY
+                                </Badge>
+                                <Badge
+                                    v-else-if="col.index_type === 'unique'"
+                                    variant="secondary"
+                                    class="uppercase"
+                                >
+                                    UNIQUE
+                                </Badge>
+                                <Badge
+                                    v-else-if="col.index_type === 'index'"
+                                    variant="outline"
+                                    class="uppercase"
+                                >
+                                    INDEX
+                                </Badge>
+                                <span
+                                    v-else
+                                    class="text-xs text-muted-foreground"
+                                >
+                                    -
+                                </span>
+                            </td>
                             <td class="px-4 py-3 text-right">
                                 <div class="inline-flex items-center gap-1">
                                     <Button
@@ -483,7 +557,7 @@ const formatCell = (value: unknown): string => {
                                         variant="ghost"
                                         size="icon"
                                         :title="t('database.rename_field')"
-                                        @click="openRenameDialog(col.name)"
+                                        @click="openRenameDialog(col)"
                                     >
                                         <Pencil class="size-4" />
                                     </Button>
@@ -532,6 +606,66 @@ const formatCell = (value: unknown): string => {
                         />
                         <InputError :message="renameForm.errors.new_name" />
                     </div>
+
+                    <template
+                        v-if="
+                            renamingColumn &&
+                            renamingColumn.name !== primaryKey
+                        "
+                    >
+                        <div class="grid gap-2">
+                            <Label for="field-type">
+                                {{ t('database.field_type') }}
+                            </Label>
+                            <select
+                                id="field-type"
+                                v-model="renameForm.type"
+                                class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 font-mono text-sm shadow-xs"
+                            >
+                                <option
+                                    v-for="opt in fieldTypeOptions"
+                                    :key="opt"
+                                    :value="opt"
+                                >
+                                    {{ opt }}
+                                </option>
+                            </select>
+                            <InputError :message="renameForm.errors.type" />
+                        </div>
+
+                        <div class="grid gap-2">
+                            <Label for="field-index">
+                                {{ t('database.index') }}
+                            </Label>
+                            <select
+                                id="field-index"
+                                v-model="renameForm.index"
+                                class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs"
+                            >
+                                <option value="none">
+                                    {{ t('database.index_none') }}
+                                </option>
+                                <option value="index">
+                                    {{ t('database.index_normal') }}
+                                </option>
+                                <option value="unique">
+                                    {{ t('database.index_unique') }}
+                                </option>
+                            </select>
+                            <InputError :message="renameForm.errors.index" />
+                        </div>
+
+                        <label
+                            class="flex cursor-pointer items-center gap-2 text-sm"
+                        >
+                            <input
+                                v-model="renameForm.nullable"
+                                type="checkbox"
+                                class="size-4 rounded border-input accent-primary"
+                            />
+                            <span>{{ t('database.nullable') }}</span>
+                        </label>
+                    </template>
 
                     <DialogFooter>
                         <Button

@@ -55,7 +55,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::prefix('database')->name('database.')->group(function () {
         Route::get('/', [DatabaseExplorerController::class, 'index'])->middleware('permission:database.view')->name('index');
         Route::get('/{table}', [DatabaseExplorerController::class, 'show'])->middleware('permission:database.view')->name('show');
-        Route::patch('/{table}/columns/{column}', [DatabaseExplorerController::class, 'renameColumn'])->middleware('permission:database.edit')->name('columns.rename');
+        Route::patch('/{table}/columns/{column}', [DatabaseExplorerController::class, 'updateColumn'])->middleware('permission:database.edit')->name('columns.update');
         Route::delete('/{table}/columns/{column}', [DatabaseExplorerController::class, 'dropColumn'])->middleware('permission:database.delete')->name('columns.drop');
         Route::put('/{table}/rows/{id}', [DatabaseExplorerController::class, 'updateRow'])->middleware('permission:database.edit')->name('rows.update');
         Route::delete('/{table}/rows/{id}', [DatabaseExplorerController::class, 'deleteRow'])->middleware('permission:database.delete')->name('rows.delete');
