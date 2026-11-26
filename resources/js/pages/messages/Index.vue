@@ -10,7 +10,7 @@ import { useInitials } from '@/composables/useInitials';
 import { useTranslation } from '@/composables/useTranslation';
 
 type ContactItem = {
-    id: number;
+    uuid: string;
     name: string;
     email: string;
     avatar: string | null;
@@ -20,7 +20,7 @@ type ContactItem = {
 };
 
 type ActivePeer = {
-    id: number;
+    uuid: string;
     name: string;
     email: string;
     avatar: string | null;
@@ -75,7 +75,7 @@ watch(search, (value) => {
         router.get(
             '/app/messages',
             {
-                user: props.activeUser?.id || undefined,
+                user: props.activeUser?.uuid || undefined,
                 search: value || undefined,
             },
             { preserveState: true, preserveScroll: true, replace: true },
@@ -95,10 +95,10 @@ const scrollToBottom = async () => {
 
 onMounted(scrollToBottom);
 watch(() => props.messages.length, scrollToBottom);
-watch(() => props.activeUser?.id, scrollToBottom);
+watch(() => props.activeUser?.uuid, scrollToBottom);
 
 const form = useForm({
-    receiver_id: props.activeUser?.id ?? 0,
+    receiver_uuid: props.activeUser?.uuid ?? '',
     body: '',
 });
 
@@ -107,7 +107,7 @@ const sendMessage = () => {
         return;
     }
 
-    form.receiver_id = props.activeUser.id;
+    form.receiver_uuid = props.activeUser.uuid;
     form.post('/app/messages', {
         preserveScroll: true,
         onSuccess: () => {
@@ -146,12 +146,14 @@ const sendMessage = () => {
                 <div class="flex-1 divide-y divide-border overflow-y-auto">
                     <Link
                         v-for="contact in contacts"
-                        :key="contact.id"
-                        :href="`/app/messages?user=${contact.id}`"
+                        :key="contact.uuid"
+                        :href="`/app/messages?user=${contact.uuid}`"
                         preserve-scroll
                         class="flex items-center gap-3 px-3 py-3 transition-colors hover:bg-muted/50"
                         :class="
-                            activeUser?.id === contact.id ? 'bg-muted/70' : ''
+                            activeUser?.uuid === contact.uuid
+                                ? 'bg-muted/70'
+                                : ''
                         "
                     >
                         <Avatar class="size-10 shrink-0 rounded-full">

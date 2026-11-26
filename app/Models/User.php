@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -18,6 +19,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
@@ -49,6 +51,18 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
      * @var list<string>
      */
     protected $appends = ['avatar'];
+
+    /**
+     * Automatically assign a UUID when creating a new user.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (User $user): void {
+            if (empty($user->uuid)) {
+                $user->uuid = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * Get the public URL of the user's avatar, or null when none is uploaded.

@@ -20,7 +20,7 @@ class MessageController extends Controller
         /** @var User $authUser */
         $authUser = $request->user();
         $search = $request->string('search')->trim()->value();
-        $selectedUserId = $request->integer('user') ?: null;
+        $selectedUserUuid = $request->string('user')->trim()->value();
 
         $otherUsers = User::query()
             ->where('id', '!=', $authUser->id)
@@ -63,7 +63,7 @@ class MessageController extends Controller
                 $last = $lastMessageByPeer[$peer->id] ?? null;
 
                 return [
-                    'id' => $peer->id,
+                    'uuid' => $peer->uuid,
                     'name' => $peer->name,
                     'email' => $peer->email,
                     'avatar' => $peer->avatar,
@@ -80,10 +80,11 @@ class MessageController extends Controller
         $activeUser = null;
         $messages = [];
 
-        if ($selectedUserId !== null) {
+        if ($selectedUserUuid !== '') {
             $peer = User::query()
                 ->where('id', '!=', $authUser->id)
-                ->find($selectedUserId);
+                ->where('uuid', $selectedUserUuid)
+                ->first();
 
             if ($peer !== null) {
                 Message::query()
@@ -93,7 +94,7 @@ class MessageController extends Controller
                     ->update(['read_at' => now()]);
 
                 $activeUser = [
-                    'id' => $peer->id,
+                    'uuid' => $peer->uuid,
                     'name' => $peer->name,
                     'email' => $peer->email,
                     'avatar' => $peer->avatar,
@@ -135,7 +136,7 @@ class MessageController extends Controller
     }
 
     /**
-     * Send a new direct message from the authenticated user to the selected recipient.
+     * Send a new direct message from the authenticated user to the recipient identified by UUID.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -143,18 +144,21 @@ class MessageController extends Controller
         $authUser = $request->user();
 
         $validated = $request->validate([
-            'receiver_id' => [
+            'receiver_uuid' => [
                 'required',
-                'integer',
-                Rule::exists(User::class, 'id'),
-                Rule::notIn([$authUser->id]),
+                'uuid',
+                Rule::exists(User::class, 'uuid'),
+                Rule::notIn([$authUser->uuid]),
             ],
             'body' => ['required', 'string', 'max:5000'],
         ]);
 
+        /** @var User $receiver */
+        $receiver = User::query()->where('uuid', $validated['receiver_uuid'])->firstOrFail();
+
         Message::query()->create([
             'sender_id' => $authUser->id,
-            'receiver_id' => (int) $validated['receiver_id'],
+            'receiver_id' => $receiver->id,
             'body' => trim($validated['body']),
         ]);
 
