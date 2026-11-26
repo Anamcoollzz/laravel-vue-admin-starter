@@ -184,6 +184,8 @@ const messages: Record<Locale, Record<string, string>> = {
         "files.choose_file": "Choose File",
         "files.size": "Size",
         "files.modified": "Modified",
+        "files.copy_link": "Copy Link",
+        "files.copied": "Copied!",
         "files.empty": "This folder is empty.",
     },
     id: {
@@ -366,6 +368,8 @@ const messages: Record<Locale, Record<string, string>> = {
         "files.choose_file": "Pilih File",
         "files.size": "Ukuran",
         "files.modified": "Diubah",
+        "files.copy_link": "Salin Tautan",
+        "files.copied": "Tersalin!",
         "files.empty": "Folder ini masih kosong.",
     },
 };

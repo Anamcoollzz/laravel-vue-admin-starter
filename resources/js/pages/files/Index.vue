@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
+    Check,
     ChevronRight,
     Download,
     ExternalLink,
@@ -8,6 +9,7 @@ import {
     Folder,
     FolderPlus,
     Home,
+    Link2,
     Trash2,
     Upload,
 } from '@lucide/vue';
@@ -118,6 +120,21 @@ const submitUpload = () => {
             uploadForm.reset();
         },
     });
+};
+
+const copiedPath = ref<string | null>(null);
+
+const copyLink = async (file: FileItem) => {
+    const fullUrl = new URL(file.url, window.location.origin).href;
+
+    await navigator.clipboard.writeText(fullUrl);
+    copiedPath.value = file.path;
+
+    setTimeout(() => {
+        if (copiedPath.value === file.path) {
+            copiedPath.value = null;
+        }
+    }, 1500);
 };
 
 const deleteItem = (path: string, type: 'file' | 'directory') => {
@@ -269,6 +286,22 @@ const deleteItem = (path: string, type: 'file' | 'directory') => {
                             </td>
                             <td class="px-4 py-3 text-right">
                                 <div class="inline-flex items-center gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        :title="
+                                            copiedPath === file.path
+                                                ? t('files.copied')
+                                                : t('files.copy_link')
+                                        "
+                                        @click="copyLink(file)"
+                                    >
+                                        <Check
+                                            v-if="copiedPath === file.path"
+                                            class="size-4 text-emerald-600"
+                                        />
+                                        <Link2 v-else class="size-4" />
+                                    </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon"
