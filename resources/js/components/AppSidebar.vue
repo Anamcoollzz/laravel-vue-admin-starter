@@ -4,6 +4,7 @@ import {
     BookOpen,
     Database,
     FolderGit2,
+    FolderOpen,
     KeyRound,
     LayoutGrid,
     ShieldCheck,
@@ -72,6 +73,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: "/app/database",
             icon: Table2,
             permission: "database.view",
+        },
+        {
+            title: t("nav.files"),
+            href: "/app/files",
+            icon: FolderOpen,
+            permission: "files.view",
         },
     ]
         .filter((item) => can(item.permission))

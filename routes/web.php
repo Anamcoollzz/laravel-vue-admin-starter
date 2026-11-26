@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DatabaseExplorerController;
+use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RoleManagementController;
@@ -59,6 +60,14 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::delete('/{table}/columns/{column}', [DatabaseExplorerController::class, 'dropColumn'])->middleware('permission:database.delete')->name('columns.drop');
         Route::put('/{table}/rows/{id}', [DatabaseExplorerController::class, 'updateRow'])->middleware('permission:database.edit')->name('rows.update');
         Route::delete('/{table}/rows/{id}', [DatabaseExplorerController::class, 'deleteRow'])->middleware('permission:database.delete')->name('rows.delete');
+    });
+
+    Route::prefix('files')->name('files.')->group(function () {
+        Route::get('/', [FileManagerController::class, 'index'])->middleware('permission:files.view')->name('index');
+        Route::post('/upload', [FileManagerController::class, 'upload'])->middleware('permission:files.create')->name('upload');
+        Route::post('/folder', [FileManagerController::class, 'createFolder'])->middleware('permission:files.create')->name('folder');
+        Route::get('/download', [FileManagerController::class, 'download'])->middleware('permission:files.view')->name('download');
+        Route::delete('/', [FileManagerController::class, 'destroy'])->middleware('permission:files.delete')->name('destroy');
     });
 });
 

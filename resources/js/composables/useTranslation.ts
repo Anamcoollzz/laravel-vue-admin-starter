@@ -14,6 +14,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.permissions": "Permission Management",
         "nav.backups": "Database Backup",
         "nav.database": "Database Explorer",
+        "nav.files": "File Manager",
 
         // Common
         "common.search": "Search...",
@@ -169,6 +170,21 @@ const messages: Record<Locale, Record<string, string>> = {
         "database.no_pk_notice": "Editing and deleting rows requires a single-column primary key.",
         "database.yes": "Yes",
         "database.no": "No",
+
+        // File Manager
+        "files.title": "File Manager",
+        "files.description": "Browse, upload, and manage files in public storage.",
+        "files.root": "Root",
+        "files.new_folder": "New Folder",
+        "files.new_folder_desc": "Create a new folder in the current directory.",
+        "files.folder_name": "Folder Name",
+        "files.upload": "Upload File",
+        "files.upload_desc": "Upload a file to the current directory (max 10 MB).",
+        "files.uploading": "Uploading...",
+        "files.choose_file": "Choose File",
+        "files.size": "Size",
+        "files.modified": "Modified",
+        "files.empty": "This folder is empty.",
     },
     id: {
         // Navigation
@@ -180,6 +196,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.permissions": "Manajemen Izin",
         "nav.backups": "Backup Database",
         "nav.database": "Jelajah Database",
+        "nav.files": "Manajer File",
 
         // Common
         "common.search": "Cari...",
@@ -335,6 +352,21 @@ const messages: Record<Locale, Record<string, string>> = {
         "database.no_pk_notice": "Edit dan hapus data memerlukan primary key satu kolom.",
         "database.yes": "Ya",
         "database.no": "Tidak",
+
+        // File Manager
+        "files.title": "Manajer File",
+        "files.description": "Jelajahi, unggah, dan kelola file di penyimpanan publik.",
+        "files.root": "Root",
+        "files.new_folder": "Folder Baru",
+        "files.new_folder_desc": "Buat folder baru di direktori saat ini.",
+        "files.folder_name": "Nama Folder",
+        "files.upload": "Unggah File",
+        "files.upload_desc": "Unggah file ke direktori saat ini (maks 10 MB).",
+        "files.uploading": "Mengunggah...",
+        "files.choose_file": "Pilih File",
+        "files.size": "Ukuran",
+        "files.modified": "Diubah",
+        "files.empty": "Folder ini masih kosong.",
     },
 };
 

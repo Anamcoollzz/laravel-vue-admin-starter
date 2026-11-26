@@ -36,6 +36,9 @@ class RolePermissionSeeder extends Seeder
             'database.view',
             'database.edit',
             'database.delete',
+            'files.view',
+            'files.create',
+            'files.delete',
         ];
 
         foreach ($permissions as $permission) {
