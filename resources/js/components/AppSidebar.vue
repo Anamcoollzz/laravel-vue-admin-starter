@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
+import {
+    BookOpen,
+    FolderGit2,
+    KeyRound,
+    LayoutGrid,
+    ShieldCheck,
+    Users,
+} from '@lucide/vue';
+import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -14,16 +22,37 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useTranslation } from '@/composables/useTranslation';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const { t } = useTranslation();
+
+const mainNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Dashboard',
+        title: t('nav.dashboard'),
         href: dashboard(),
         icon: LayoutGrid,
     },
-];
+]);
+
+const accessControlNavItems = computed<NavItem[]>(() => [
+    {
+        title: t('nav.users'),
+        href: '/users',
+        icon: Users,
+    },
+    {
+        title: t('nav.roles'),
+        href: '/roles',
+        icon: ShieldCheck,
+    },
+    {
+        title: t('nav.permissions'),
+        href: '/permissions',
+        icon: KeyRound,
+    },
+]);
 
 const footerNavItems: NavItem[] = [
     {
@@ -54,7 +83,11 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain :items="mainNavItems" :label="t('nav.platform')" />
+            <NavMain
+                :items="accessControlNavItems"
+                :label="t('nav.access_control')"
+            />
         </SidebarContent>
 
         <SidebarFooter>
