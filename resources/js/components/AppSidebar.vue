@@ -7,6 +7,7 @@ import {
     FileText,
     FolderGit2,
     FolderOpen,
+    History,
     KeyRound,
     LayoutGrid,
     Megaphone,
@@ -72,6 +73,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: '/app/sessions',
             icon: MonitorSmartphone,
             permission: 'sessions.view',
+        },
+        {
+            title: t('nav.login_history'),
+            href: '/app/login-history',
+            icon: History,
+            permission: 'login_history.view',
         },
         {
             title: t('nav.roles'),

@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Listeners\RecordLoginHistory;
 use App\Models\Setting;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -28,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->applyDatabaseSettings();
+
+        Event::listen(Login::class, [RecordLoginHistory::class, 'handleLogin']);
+        Event::listen(Failed::class, [RecordLoginHistory::class, 'handleFailed']);
+        Event::listen(Logout::class, [RecordLoginHistory::class, 'handleLogout']);
     }
 
     /**

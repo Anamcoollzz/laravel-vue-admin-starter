@@ -49,6 +49,8 @@ class RolePermissionSeeder extends Seeder
             'settings.edit',
             'sessions.view',
             'sessions.delete',
+            'login_history.view',
+            'login_history.delete',
         ];
 
         foreach ($permissions as $permission) {

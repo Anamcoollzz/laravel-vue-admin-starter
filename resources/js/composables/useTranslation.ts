@@ -13,6 +13,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.announcements': 'Announcements',
         'nav.users': 'User Management',
         'nav.sessions': 'User Sessions',
+        'nav.login_history': 'Login History',
         'nav.roles': 'Role Management',
         'nav.permissions': 'Permission Management',
         'nav.backups': 'Database Backup',
@@ -340,6 +341,20 @@ const messages: Record<Locale, Record<string, string>> = {
         'sessions.device': 'Device & Browser',
         'sessions.last_activity': 'Last Activity',
         'sessions.current': 'Current Session',
+
+        // Login History
+        'login_history.title': 'Login History',
+        'login_history.description':
+            'Audit trail of user logins, failed login attempts, and logouts.',
+        'login_history.all_statuses': 'All Statuses',
+        'login_history.status_success': 'Success',
+        'login_history.status_failed': 'Failed',
+        'login_history.status_logout': 'Logout',
+        'login_history.clear_all': 'Clear All',
+        'login_history.confirm_clear':
+            'Are you sure you want to delete all login history?',
+        'login_history.search_placeholder':
+            'Search user, email, IP, or browser...',
     },
     id: {
         // Navigation
@@ -350,6 +365,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.announcements': 'Pengumuman',
         'nav.users': 'Manajemen Pengguna',
         'nav.sessions': 'Sesi Pengguna',
+        'nav.login_history': 'Riwayat Login',
         'nav.roles': 'Manajemen Role',
         'nav.permissions': 'Manajemen Izin',
         'nav.backups': 'Backup Database',
@@ -676,6 +692,20 @@ const messages: Record<Locale, Record<string, string>> = {
         'sessions.device': 'Perangkat & Browser',
         'sessions.last_activity': 'Aktivitas Terakhir',
         'sessions.current': 'Sesi Saat Ini',
+
+        // Login History
+        'login_history.title': 'Riwayat Login',
+        'login_history.description':
+            'Catatan aktivitas login berhasil, percobaan gagal, dan logout pengguna.',
+        'login_history.all_statuses': 'Semua Status',
+        'login_history.status_success': 'Berhasil',
+        'login_history.status_failed': 'Gagal',
+        'login_history.status_logout': 'Logout',
+        'login_history.clear_all': 'Hapus Semua',
+        'login_history.confirm_clear':
+            'Apakah Anda yakin ingin menghapus semua riwayat login?',
+        'login_history.search_placeholder':
+            'Cari user, email, IP, atau browser...',
     },
 };
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\LaravelLogViewerController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\LoginHistoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionManagementController;
@@ -120,6 +121,12 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::get('/', [UserSessionController::class, 'index'])->middleware('permission:sessions.view')->name('index');
         Route::delete('/others', [UserSessionController::class, 'destroyOthers'])->middleware('permission:sessions.delete')->name('destroy-others');
         Route::delete('/{sessionId}', [UserSessionController::class, 'destroy'])->middleware('permission:sessions.delete')->name('destroy');
+    });
+
+    Route::prefix('login-history')->name('login-history.')->group(function () {
+        Route::get('/', [LoginHistoryController::class, 'index'])->middleware('permission:login_history.view')->name('index');
+        Route::delete('/clear', [LoginHistoryController::class, 'clear'])->middleware('permission:login_history.delete')->name('clear');
+        Route::delete('/{loginHistory}', [LoginHistoryController::class, 'destroy'])->middleware('permission:login_history.delete')->name('destroy');
     });
 });
 
