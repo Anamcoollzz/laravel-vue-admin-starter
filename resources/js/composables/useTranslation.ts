@@ -15,6 +15,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.backups': 'Database Backup',
         'nav.database': 'Database Explorer',
         'nav.files': 'File Manager',
+        'nav.logs': 'Request Logs',
 
         // Common
         'common.search': 'Search...',
@@ -193,6 +194,32 @@ const messages: Record<Locale, Record<string, string>> = {
         'files.copy_link': 'Copy Link',
         'files.copied': 'Copied!',
         'files.empty': 'This folder is empty.',
+
+        // Request Logs
+        'logs.title': 'Request Logs',
+        'logs.description':
+            'Monitor incoming HTTP requests, users, roles, IP addresses, and payloads.',
+        'logs.clear_all': 'Clear All',
+        'logs.confirm_clear':
+            'Are you sure you want to delete all request logs?',
+        'logs.all_methods': 'All Methods',
+        'logs.search_placeholder': 'Search path, IP, browser, or user...',
+        'logs.user': 'User',
+        'logs.guest': 'Guest',
+        'logs.method': 'Method',
+        'logs.path': 'Path',
+        'logs.ip_browser': 'IP & Browser',
+        'logs.time': 'Time',
+        'logs.detail': 'Request Detail',
+        'logs.detail_desc': 'Full metadata and sanitized request payload.',
+        'logs.status': 'Status',
+        'logs.duration': 'Duration',
+        'logs.route': 'Route Name',
+        'logs.platform': 'Platform',
+        'logs.user_agent': 'User Agent',
+        'logs.referer': 'Referer',
+        'logs.payload': 'Request Payload',
+        'logs.no_payload': 'No payload',
     },
     id: {
         // Navigation
@@ -205,6 +232,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.backups': 'Backup Database',
         'nav.database': 'Jelajah Database',
         'nav.files': 'Manajer File',
+        'nav.logs': 'Log Request',
 
         // Common
         'common.search': 'Cari...',
@@ -380,6 +408,33 @@ const messages: Record<Locale, Record<string, string>> = {
         'files.copy_link': 'Salin Tautan',
         'files.copied': 'Tersalin!',
         'files.empty': 'Folder ini masih kosong.',
+
+        // Request Logs
+        'logs.title': 'Log Request',
+        'logs.description':
+            'Pantau aktivitas request HTTP, pengguna, role, alamat IP, dan payload.',
+        'logs.clear_all': 'Hapus Semua',
+        'logs.confirm_clear':
+            'Apakah Anda yakin ingin menghapus semua log request?',
+        'logs.all_methods': 'Semua Method',
+        'logs.search_placeholder': 'Cari path, IP, browser, atau user...',
+        'logs.user': 'Pengguna',
+        'logs.guest': 'Tamu',
+        'logs.method': 'Method',
+        'logs.path': 'Path',
+        'logs.ip_browser': 'IP & Browser',
+        'logs.time': 'Waktu',
+        'logs.detail': 'Detail Request',
+        'logs.detail_desc':
+            'Metadata lengkap dan payload request yang disanitasi.',
+        'logs.status': 'Status',
+        'logs.duration': 'Durasi',
+        'logs.route': 'Nama Route',
+        'logs.platform': 'Platform',
+        'logs.user_agent': 'User Agent',
+        'logs.referer': 'Referer',
+        'logs.payload': 'Payload Request',
+        'logs.no_payload': 'Tidak ada payload',
     },
 };
 

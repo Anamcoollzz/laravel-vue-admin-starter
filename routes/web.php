@@ -5,6 +5,7 @@ use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PermissionManagementController;
+use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,12 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::post('/folder', [FileManagerController::class, 'createFolder'])->middleware('permission:files.create')->name('folder');
         Route::get('/download', [FileManagerController::class, 'download'])->middleware('permission:files.view')->name('download');
         Route::delete('/', [FileManagerController::class, 'destroy'])->middleware('permission:files.delete')->name('destroy');
+    });
+
+    Route::prefix('request-logs')->name('request-logs.')->group(function () {
+        Route::get('/', [RequestLogController::class, 'index'])->middleware('permission:logs.view')->name('index');
+        Route::delete('/clear', [RequestLogController::class, 'clear'])->middleware('permission:logs.delete')->name('clear');
+        Route::delete('/{requestLog}', [RequestLogController::class, 'destroy'])->middleware('permission:logs.delete')->name('destroy');
     });
 });
 

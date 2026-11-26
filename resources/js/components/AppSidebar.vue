@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import {
+    Activity,
     BookOpen,
     Database,
     FolderGit2,
@@ -79,6 +80,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: '/app/files',
             icon: FolderOpen,
             permission: 'files.view',
+        },
+        {
+            title: t('nav.logs'),
+            href: '/app/request-logs',
+            icon: Activity,
+            permission: 'logs.view',
         },
     ]
         .filter((item) => can(item.permission))
