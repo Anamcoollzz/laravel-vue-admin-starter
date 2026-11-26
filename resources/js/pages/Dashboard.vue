@@ -126,56 +126,6 @@ const iconFor = (type: DashboardAnnouncement['type']) => {
             </div>
         </div>
 
-        <Head :title="t('nav.dashboard')" />
-
-        <!-- Active Announcements -->
-        <div v-if="announcements.length > 0" class="space-y-3">
-            <div class="flex items-center gap-2 text-sm font-medium">
-                <Megaphone class="size-4 text-primary" />
-                <span>{{ t('announcements.title') }}</span>
-            </div>
-
-            <div class="grid gap-3">
-                <div
-                    v-for="item in announcements"
-                    :key="item.id"
-                    class="rounded-xl border p-4"
-                    :class="cardStyle(item.type)"
-                >
-                    <div class="flex items-start gap-3">
-                        <component
-                            :is="iconFor(item.type)"
-                            class="mt-0.5 size-5 shrink-0"
-                        />
-                        <div class="min-w-0 flex-1 space-y-1">
-                            <div
-                                class="flex flex-wrap items-center justify-between gap-2"
-                            >
-                                <h2 class="font-semibold">{{ item.title }}</h2>
-                                <Badge variant="outline" class="uppercase">
-                                    {{ item.type }}
-                                </Badge>
-                            </div>
-                            <p
-                                class="whitespace-pre-line text-sm text-muted-foreground"
-                            >
-                                {{ item.content }}
-                            </p>
-                            <p class="text-xs text-muted-foreground/80">
-                                <span v-if="item.author">{{ item.author }}</span>
-                                <span v-if="item.author && item.created_at">
-                                    ·
-                                </span>
-                                <span v-if="item.created_at">
-                                    {{ item.created_at }}
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <div
                 class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
