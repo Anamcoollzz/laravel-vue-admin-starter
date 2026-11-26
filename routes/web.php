@@ -15,6 +15,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleManagementController;
+use App\Http\Controllers\SwaggerController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\UserSessionController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'Welcome')->name('home');
 
 Route::post('locale', [LocaleController::class, 'update'])->name('locale.update');
+
+Route::get('api/docs', [SwaggerController::class, 'ui'])->name('swagger.ui');
+Route::get('api/docs/openapi.json', [SwaggerController::class, 'spec'])->name('swagger.spec');
 
 Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
