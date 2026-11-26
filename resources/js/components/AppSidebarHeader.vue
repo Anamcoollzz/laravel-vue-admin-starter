@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Languages } from '@lucide/vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import NotificationBell from '@/components/NotificationBell.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useTranslation } from '@/composables/useTranslation';
 import type { BreadcrumbItem } from '@/types';
@@ -29,6 +30,7 @@ const { locale, setLocale } = useTranslation();
         </div>
 
         <div class="flex items-center gap-2">
+            <NotificationBell />
             <div
                 class="inline-flex items-center rounded-md border border-border bg-muted/40 p-0.5 text-xs font-medium"
                 role="group"

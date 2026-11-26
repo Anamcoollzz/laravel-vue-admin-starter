@@ -8,6 +8,7 @@ use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\LaravelLogViewerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleManagementController;
@@ -24,6 +25,11 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::prefix('messages')->name('messages.')->group(function () {
         Route::get('/', [MessageController::class, 'index'])->name('index');
         Route::post('/', [MessageController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::post('/read-all', [NotificationController::class, 'markAllAsRead'])->name('read-all');
+        Route::post('/{id}/read', [NotificationController::class, 'markAsRead'])->name('read');
     });
 
     Route::prefix('announcements')->name('announcements.')->group(function () {

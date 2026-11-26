@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\User;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -156,11 +157,13 @@ class MessageController extends Controller
         /** @var User $receiver */
         $receiver = User::query()->where('uuid', $validated['receiver_uuid'])->firstOrFail();
 
-        Message::query()->create([
+        $message = Message::query()->create([
             'sender_id' => $authUser->id,
             'receiver_id' => $receiver->id,
             'body' => trim($validated['body']),
         ]);
+
+        $receiver->notify(new NewMessageNotification($authUser, $message));
 
         return back();
     }

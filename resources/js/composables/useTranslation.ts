@@ -272,6 +272,11 @@ const messages: Record<Locale, Record<string, string>> = {
         'messages.no_messages': 'No messages yet. Say hello!',
         'messages.type_placeholder': 'Type a message...',
         'messages.send': 'Send',
+
+        // Notifications
+        'notifications.title': 'Notifications',
+        'notifications.mark_all_read': 'Mark all as read',
+        'notifications.empty': 'No notifications yet.',
     },
     id: {
         // Navigation
@@ -539,6 +544,11 @@ const messages: Record<Locale, Record<string, string>> = {
         'messages.no_messages': 'Belum ada pesan. Mulai percakapan sekarang!',
         'messages.type_placeholder': 'Tulis pesan...',
         'messages.send': 'Kirim',
+
+        // Notifications
+        'notifications.title': 'Notifikasi',
+        'notifications.mark_all_read': 'Tandai semua dibaca',
+        'notifications.empty': 'Belum ada notifikasi.',
     },
 };
 
