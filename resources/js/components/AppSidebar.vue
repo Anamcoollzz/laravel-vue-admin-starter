@@ -4,6 +4,7 @@ import {
     Activity,
     BookOpen,
     Database,
+    FileText,
     FolderGit2,
     FolderOpen,
     KeyRound,
@@ -85,6 +86,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             title: t('nav.logs'),
             href: '/app/request-logs',
             icon: Activity,
+            permission: 'logs.view',
+        },
+        {
+            title: t('nav.laravel_logs'),
+            href: '/app/laravel-logs',
+            icon: FileText,
             permission: 'logs.view',
         },
     ]

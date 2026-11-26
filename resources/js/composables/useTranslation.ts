@@ -16,6 +16,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.database': 'Database Explorer',
         'nav.files': 'File Manager',
         'nav.logs': 'Request Logs',
+        'nav.laravel_logs': 'Laravel Log Viewer',
 
         // Common
         'common.search': 'Search...',
@@ -220,6 +221,24 @@ const messages: Record<Locale, Record<string, string>> = {
         'logs.referer': 'Referer',
         'logs.payload': 'Request Payload',
         'logs.no_payload': 'No payload',
+
+        // Laravel Log Viewer
+        'laravel_logs.title': 'Laravel Log Viewer',
+        'laravel_logs.description':
+            'Inspect, filter, and manage entries inside storage/logs files.',
+        'laravel_logs.all_levels': 'All Levels',
+        'laravel_logs.search_placeholder': 'Search message or stack trace...',
+        'laravel_logs.download': 'Download Log',
+        'laravel_logs.clear': 'Clear Log',
+        'laravel_logs.confirm_clear':
+            'Are you sure you want to clear this log file?',
+        'laravel_logs.level': 'Level',
+        'laravel_logs.message': 'Message',
+        'laravel_logs.env': 'Env',
+        'laravel_logs.stack_trace': 'Stack Trace',
+        'laravel_logs.view_detail': 'View Detail',
+        'laravel_logs.no_files': 'No log files found in storage/logs.',
+        'laravel_logs.no_entries': 'No log entries found.',
     },
     id: {
         // Navigation
@@ -233,6 +252,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.database': 'Jelajah Database',
         'nav.files': 'Manajer File',
         'nav.logs': 'Log Request',
+        'nav.laravel_logs': 'Laravel Log Viewer',
 
         // Common
         'common.search': 'Cari...',
@@ -435,6 +455,25 @@ const messages: Record<Locale, Record<string, string>> = {
         'logs.referer': 'Referer',
         'logs.payload': 'Payload Request',
         'logs.no_payload': 'Tidak ada payload',
+
+        // Laravel Log Viewer
+        'laravel_logs.title': 'Laravel Log Viewer',
+        'laravel_logs.description':
+            'Bedah, filter, dan kelola isi file log di storage/logs.',
+        'laravel_logs.all_levels': 'Semua Level',
+        'laravel_logs.search_placeholder':
+            'Cari pesan error atau stack trace...',
+        'laravel_logs.download': 'Unduh Log',
+        'laravel_logs.clear': 'Kosongkan Log',
+        'laravel_logs.confirm_clear':
+            'Apakah Anda yakin ingin mengosongkan file log ini?',
+        'laravel_logs.level': 'Level',
+        'laravel_logs.message': 'Pesan',
+        'laravel_logs.env': 'Env',
+        'laravel_logs.stack_trace': 'Stack Trace',
+        'laravel_logs.view_detail': 'Lihat Detail',
+        'laravel_logs.no_files': 'Tidak ada file log di storage/logs.',
+        'laravel_logs.no_entries': 'Tidak ada entri log ditemukan.',
     },
 };
 

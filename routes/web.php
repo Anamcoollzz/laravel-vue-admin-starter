@@ -3,6 +3,7 @@
 use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
+use App\Http\Controllers\LaravelLogViewerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RequestLogController;
@@ -75,6 +76,13 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::get('/', [RequestLogController::class, 'index'])->middleware('permission:logs.view')->name('index');
         Route::delete('/clear', [RequestLogController::class, 'clear'])->middleware('permission:logs.delete')->name('clear');
         Route::delete('/{requestLog}', [RequestLogController::class, 'destroy'])->middleware('permission:logs.delete')->name('destroy');
+    });
+
+    Route::prefix('laravel-logs')->name('laravel-logs.')->group(function () {
+        Route::get('/', [LaravelLogViewerController::class, 'index'])->middleware('permission:logs.view')->name('index');
+        Route::get('/download', [LaravelLogViewerController::class, 'download'])->middleware('permission:logs.view')->name('download');
+        Route::post('/clear', [LaravelLogViewerController::class, 'clear'])->middleware('permission:logs.delete')->name('clear');
+        Route::delete('/', [LaravelLogViewerController::class, 'destroy'])->middleware('permission:logs.delete')->name('destroy');
     });
 });
 
