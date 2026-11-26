@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DatabaseBackupController;
+use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RoleManagementController;
@@ -49,6 +50,15 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::post('/', [DatabaseBackupController::class, 'store'])->middleware('permission:backups.create')->name('store');
         Route::get('/{filename}/download', [DatabaseBackupController::class, 'download'])->middleware('permission:backups.view')->name('download');
         Route::delete('/{filename}', [DatabaseBackupController::class, 'destroy'])->middleware('permission:backups.delete')->name('destroy');
+    });
+
+    Route::prefix('database')->name('database.')->group(function () {
+        Route::get('/', [DatabaseExplorerController::class, 'index'])->middleware('permission:database.view')->name('index');
+        Route::get('/{table}', [DatabaseExplorerController::class, 'show'])->middleware('permission:database.view')->name('show');
+        Route::patch('/{table}/columns/{column}', [DatabaseExplorerController::class, 'renameColumn'])->middleware('permission:database.edit')->name('columns.rename');
+        Route::delete('/{table}/columns/{column}', [DatabaseExplorerController::class, 'dropColumn'])->middleware('permission:database.delete')->name('columns.drop');
+        Route::put('/{table}/rows/{id}', [DatabaseExplorerController::class, 'updateRow'])->middleware('permission:database.edit')->name('rows.update');
+        Route::delete('/{table}/rows/{id}', [DatabaseExplorerController::class, 'deleteRow'])->middleware('permission:database.delete')->name('rows.delete');
     });
 });
 

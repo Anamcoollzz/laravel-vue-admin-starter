@@ -13,6 +13,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.roles": "Role Management",
         "nav.permissions": "Permission Management",
         "nav.backups": "Database Backup",
+        "nav.database": "Database Explorer",
 
         // Common
         "common.search": "Search...",
@@ -140,6 +141,30 @@ const messages: Record<Locale, Record<string, string>> = {
         "backups.download": "Download",
         "backups.driver": "Driver",
         "backups.empty": "No backups created yet.",
+
+        // Database Explorer
+        "database.title": "Database Explorer",
+        "database.description": "Browse database tables, inspect fields, and manage records.",
+        "database.table_name": "Table Name",
+        "database.columns": "Fields",
+        "database.rows": "Rows",
+        "database.open": "Open",
+        "database.back": "Back to tables",
+        "database.search_tables": "Search table name...",
+        "database.tab_data": "Data",
+        "database.tab_fields": "Fields",
+        "database.field_name": "Field Name",
+        "database.field_type": "Type",
+        "database.nullable": "Nullable",
+        "database.default": "Default",
+        "database.rename_field": "Rename Field",
+        "database.rename_field_desc": "Enter a new name for this column.",
+        "database.new_field_name": "New Field Name",
+        "database.edit_row": "Edit Row",
+        "database.edit_row_desc": "Update column values for this record.",
+        "database.no_pk_notice": "Editing and deleting rows requires a single-column primary key.",
+        "database.yes": "Yes",
+        "database.no": "No",
     },
     id: {
         // Navigation
@@ -150,6 +175,7 @@ const messages: Record<Locale, Record<string, string>> = {
         "nav.roles": "Manajemen Role",
         "nav.permissions": "Manajemen Izin",
         "nav.backups": "Backup Database",
+        "nav.database": "Jelajah Database",
 
         // Common
         "common.search": "Cari...",
@@ -277,6 +303,30 @@ const messages: Record<Locale, Record<string, string>> = {
         "backups.download": "Unduh",
         "backups.driver": "Driver",
         "backups.empty": "Belum ada file backup.",
+
+        // Database Explorer
+        "database.title": "Jelajah Database",
+        "database.description": "Lihat daftar tabel, struktur field, dan kelola data secara langsung.",
+        "database.table_name": "Nama Tabel",
+        "database.columns": "Field",
+        "database.rows": "Baris Data",
+        "database.open": "Buka",
+        "database.back": "Kembali ke daftar tabel",
+        "database.search_tables": "Cari nama tabel...",
+        "database.tab_data": "Data",
+        "database.tab_fields": "Struktur Field",
+        "database.field_name": "Nama Field",
+        "database.field_type": "Tipe",
+        "database.nullable": "Nullable",
+        "database.default": "Default",
+        "database.rename_field": "Ubah Nama Field",
+        "database.rename_field_desc": "Masukkan nama baru untuk kolom ini.",
+        "database.new_field_name": "Nama Field Baru",
+        "database.edit_row": "Ubah Data",
+        "database.edit_row_desc": "Perbarui nilai kolom untuk baris data ini.",
+        "database.no_pk_notice": "Edit dan hapus data memerlukan primary key satu kolom.",
+        "database.yes": "Ya",
+        "database.no": "Tidak",
     },
 };
 

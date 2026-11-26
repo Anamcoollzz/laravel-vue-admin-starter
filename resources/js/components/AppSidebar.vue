@@ -7,6 +7,7 @@ import {
     KeyRound,
     LayoutGrid,
     ShieldCheck,
+    Table2,
     Users,
 } from "@lucide/vue";
 import { computed } from "vue";
@@ -65,6 +66,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: "/app/backups",
             icon: Database,
             permission: "backups.view",
+        },
+        {
+            title: t("nav.database"),
+            href: "/app/database",
+            icon: Table2,
+            permission: "database.view",
         },
     ]
         .filter((item) => can(item.permission))
