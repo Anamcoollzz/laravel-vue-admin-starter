@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PermissionsExport;
+use App\Imports\PermissionsImport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
-use Spatie\SimpleExcel\SimpleExcelReader;
-use Spatie\SimpleExcel\SimpleExcelWriter;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PermissionManagementController extends Controller
@@ -78,47 +79,16 @@ class PermissionManagementController extends Controller
 
     public function export(): BinaryFileResponse
     {
-        $tempPath = storage_path('app/permissions-export-'.uniqid().'.xlsx');
-
-        $writer = SimpleExcelWriter::create($tempPath);
-
-        Permission::query()
-            ->orderBy('name')
-            ->get()
-            ->each(function (Permission $permission) use ($writer): void {
-                $writer->addRow([
-                    'name' => $permission->name,
-                    'guard_name' => $permission->guard_name,
-                ]);
-            });
-
-        $writer->close();
-
-        return response()->download($tempPath, 'permissions.xlsx')->deleteFileAfterSend(true);
+        return Excel::download(new PermissionsExport, 'permissions.xlsx');
     }
 
     public function import(Request $request): RedirectResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'mimes:xlsx,csv,txt', 'max:5120'],
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:5120'],
         ]);
 
-        $file = $request->file('file');
-        $extension = strtolower($file->getClientOriginalExtension());
-
-        SimpleExcelReader::create($file->getRealPath(), $extension)
-            ->getRows()
-            ->each(function (array $row): void {
-                $name = trim((string) ($row['name'] ?? ''));
-
-                if ($name === '') {
-                    return;
-                }
-
-                $guard = trim((string) ($row['guard_name'] ?? 'web')) ?: 'web';
-
-                Permission::findOrCreate($name, $guard);
-            });
+        Excel::import(new PermissionsImport, $request->file('file'));
 
         return back();
     }

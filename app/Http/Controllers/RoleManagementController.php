@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RolesExport;
+use App\Imports\RolesImport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Spatie\SimpleExcel\SimpleExcelReader;
-use Spatie\SimpleExcel\SimpleExcelWriter;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoleManagementController extends Controller
@@ -89,58 +90,16 @@ class RoleManagementController extends Controller
 
     public function export(): BinaryFileResponse
     {
-        $tempPath = storage_path('app/roles-export-'.uniqid().'.xlsx');
-
-        $writer = SimpleExcelWriter::create($tempPath);
-
-        Role::query()
-            ->with('permissions:id,name')
-            ->orderBy('name')
-            ->get()
-            ->each(function (Role $role) use ($writer): void {
-                $writer->addRow([
-                    'name' => $role->name,
-                    'permissions' => $role->permissions->pluck('name')->implode(', '),
-                ]);
-            });
-
-        $writer->close();
-
-        return response()->download($tempPath, 'roles.xlsx')->deleteFileAfterSend(true);
+        return Excel::download(new RolesExport, 'roles.xlsx');
     }
 
     public function import(Request $request): RedirectResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'mimes:xlsx,csv,txt', 'max:5120'],
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:5120'],
         ]);
 
-        $file = $request->file('file');
-        $extension = strtolower($file->getClientOriginalExtension());
-
-        SimpleExcelReader::create($file->getRealPath(), $extension)
-            ->getRows()
-            ->each(function (array $row): void {
-                $name = trim((string) ($row['name'] ?? ''));
-
-                if ($name === '') {
-                    return;
-                }
-
-                $role = Role::findOrCreate($name, 'web');
-
-                $permissionsRaw = trim((string) ($row['permissions'] ?? ''));
-
-                if ($permissionsRaw !== '') {
-                    $permissionNames = array_filter(array_map('trim', explode(',', $permissionsRaw)));
-
-                    foreach ($permissionNames as $permissionName) {
-                        Permission::findOrCreate($permissionName, 'web');
-                    }
-
-                    $role->syncPermissions($permissionNames);
-                }
-            });
+        Excel::import(new RolesImport, $request->file('file'));
 
         return back();
     }
