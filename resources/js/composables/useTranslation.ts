@@ -19,6 +19,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.files': 'File Manager',
         'nav.logs': 'Request Logs',
         'nav.laravel_logs': 'Laravel Log Viewer',
+        'nav.app_settings': 'App Settings',
 
         // Common
         'common.search': 'Search...',
@@ -277,6 +278,31 @@ const messages: Record<Locale, Record<string, string>> = {
         'notifications.title': 'Notifications',
         'notifications.mark_all_read': 'Mark all as read',
         'notifications.empty': 'No notifications yet.',
+
+        // App Settings
+        'app_settings.title': 'Application Settings',
+        'app_settings.description':
+            'Manage general configuration, SMTP mail server, and privacy policy.',
+        'app_settings.group_general': 'General Settings',
+        'app_settings.group_smtp': 'SMTP Mail',
+        'app_settings.group_privacy': 'Privacy Policy',
+        'app_settings.app_name': 'Application Name',
+        'app_settings.logo': 'Logo',
+        'app_settings.favicon': 'Favicon',
+        'app_settings.country': 'Country',
+        'app_settings.city': 'City',
+        'app_settings.year': 'Year',
+        'app_settings.smtp_host': 'SMTP Host',
+        'app_settings.smtp_port': 'SMTP Port',
+        'app_settings.smtp_username': 'SMTP Username',
+        'app_settings.smtp_password': 'SMTP Password',
+        'app_settings.smtp_password_keep': 'Leave blank to keep saved password',
+        'app_settings.smtp_encryption': 'Encryption',
+        'app_settings.smtp_from_address': 'From Email Address',
+        'app_settings.smtp_from_name': 'From Name',
+        'app_settings.privacy_policy': 'Privacy Policy Content',
+        'app_settings.privacy_placeholder':
+            'Write your application privacy policy here...',
     },
     id: {
         // Navigation
@@ -293,6 +319,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.files': 'Manajer File',
         'nav.logs': 'Log Request',
         'nav.laravel_logs': 'Laravel Log Viewer',
+        'nav.app_settings': 'App Settings',
 
         // Common
         'common.search': 'Cari...',
@@ -549,6 +576,32 @@ const messages: Record<Locale, Record<string, string>> = {
         'notifications.title': 'Notifikasi',
         'notifications.mark_all_read': 'Tandai semua dibaca',
         'notifications.empty': 'Belum ada notifikasi.',
+
+        // App Settings
+        'app_settings.title': 'Pengaturan Aplikasi',
+        'app_settings.description':
+            'Kelola pengaturan umum, server email SMTP, dan kebijakan privasi.',
+        'app_settings.group_general': 'Pengaturan Umum',
+        'app_settings.group_smtp': 'SMTP Email',
+        'app_settings.group_privacy': 'Kebijakan Privasi',
+        'app_settings.app_name': 'Nama Aplikasi',
+        'app_settings.logo': 'Logo',
+        'app_settings.favicon': 'Favicon',
+        'app_settings.country': 'Negara',
+        'app_settings.city': 'Kota',
+        'app_settings.year': 'Tahun',
+        'app_settings.smtp_host': 'Host SMTP',
+        'app_settings.smtp_port': 'Port SMTP',
+        'app_settings.smtp_username': 'Username SMTP',
+        'app_settings.smtp_password': 'Password SMTP',
+        'app_settings.smtp_password_keep':
+            'Kosongkan jika tidak ingin mengubah password',
+        'app_settings.smtp_encryption': 'Enkripsi',
+        'app_settings.smtp_from_address': 'Alamat Email Pengirim',
+        'app_settings.smtp_from_name': 'Nama Pengirim',
+        'app_settings.privacy_policy': 'Isi Kebijakan Privasi',
+        'app_settings.privacy_placeholder':
+            'Tulis kebijakan privasi aplikasi Anda di sini...',
     },
 };
 

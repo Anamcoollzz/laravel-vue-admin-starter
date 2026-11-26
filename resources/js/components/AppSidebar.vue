@@ -12,6 +12,7 @@ import {
     Megaphone,
     MessageSquare,
     ShieldCheck,
+    SlidersHorizontal,
     Table2,
     Users,
 } from '@lucide/vue';
@@ -106,6 +107,12 @@ const accessControlNavItems = computed<NavItem[]>(() =>
             href: '/app/laravel-logs',
             icon: FileText,
             permission: 'logs.view',
+        },
+        {
+            title: t('nav.app_settings'),
+            href: '/app/app-settings',
+            icon: SlidersHorizontal,
+            permission: 'settings.view',
         },
     ]
         .filter((item) => can(item.permission))

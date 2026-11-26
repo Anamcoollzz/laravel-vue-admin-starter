@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DatabaseExplorerController;
@@ -104,6 +105,13 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
         Route::get('/download', [LaravelLogViewerController::class, 'download'])->middleware('permission:logs.view')->name('download');
         Route::post('/clear', [LaravelLogViewerController::class, 'clear'])->middleware('permission:logs.delete')->name('clear');
         Route::delete('/', [LaravelLogViewerController::class, 'destroy'])->middleware('permission:logs.delete')->name('destroy');
+    });
+
+    Route::prefix('app-settings')->name('app-settings.')->group(function () {
+        Route::get('/', [AppSettingController::class, 'index'])->middleware('permission:settings.view')->name('index');
+        Route::post('/general', [AppSettingController::class, 'updateGeneral'])->middleware('permission:settings.edit')->name('general');
+        Route::put('/smtp', [AppSettingController::class, 'updateSmtp'])->middleware('permission:settings.edit')->name('smtp');
+        Route::put('/privacy', [AppSettingController::class, 'updatePrivacy'])->middleware('permission:settings.edit')->name('privacy');
     });
 });
 
