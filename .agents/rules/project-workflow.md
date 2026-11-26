@@ -11,6 +11,10 @@ These rules take precedence over any default framework or Boost guidelines.
 - Do NOT write, create, update, or run any tests whatsoever (including Pest, PHPUnit, Vitest, Playwright, or any `artisan test` / `pest` commands) unless the user explicitly asks for testing in that prompt.
 - This rule explicitly overrides any test enforcement guidelines in `AGENTS.md`.
 
+## Auto-Stage Changes
+
+- Every time you finish a task or complete a user prompt that creates, modifies, or deletes files, automatically stage all changes by running `git add -A` before giving your final response.
+
 ## Commit Message Suggestion
 
 - Every time you finish a task or complete a user prompt, always include a suggested Git commit message in **English** at the end of your response.
