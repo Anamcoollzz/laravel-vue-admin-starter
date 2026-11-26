@@ -44,8 +44,6 @@ const messages: Record<Locale, Record<string, string>> = {
         "common.download_template": "Download Template",
         "common.template_hint":
             "Not sure about the format? Use the sample template.",
-        'common.download_template': 'Download Template',
-        'common.template_hint': 'Not sure about the format? Use the sample template.',
 
         // Users
         "users.title": "User Management",
@@ -122,8 +120,6 @@ const messages: Record<Locale, Record<string, string>> = {
         "common.import_columns": "Kolom yang didukung",
         "common.download_template": "Unduh Template",
         "common.template_hint": "Bingung formatnya? Gunakan contoh template.",
-        'common.download_template': 'Unduh Template',
-        'common.template_hint': 'Bingung formatnya? Gunakan contoh template.',
 
         // Users
         "users.title": "Manajemen Pengguna",

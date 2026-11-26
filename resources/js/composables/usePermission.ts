@@ -1,9 +1,8 @@
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import type { AppPageProps } from '@/types';
 
 export function usePermission() {
-    const page = usePage<AppPageProps>();
+    const page = usePage();
 
     const roles = computed(() => page.props.auth?.roles ?? []);
     const permissions = computed(() => page.props.auth?.permissions ?? []);
