@@ -9,6 +9,7 @@ const messages: Record<Locale, Record<string, string>> = {
         'nav.platform': 'Platform',
         'nav.access_control': 'Access Control',
         'nav.dashboard': 'Dashboard',
+        'nav.messages': 'Messages',
         'nav.announcements': 'Announcements',
         'nav.users': 'User Management',
         'nav.roles': 'Role Management',
@@ -262,12 +263,22 @@ const messages: Record<Locale, Record<string, string>> = {
         'announcements.inactive': 'Inactive',
         'announcements.all_types': 'All Types',
         'announcements.search_placeholder': 'Search title or content...',
+
+        // Messages / Chat
+        'messages.title': 'Messages',
+        'messages.search_users': 'Search user...',
+        'messages.no_contacts': 'No users found.',
+        'messages.select_conversation': 'Select a user to start chatting.',
+        'messages.no_messages': 'No messages yet. Say hello!',
+        'messages.type_placeholder': 'Type a message...',
+        'messages.send': 'Send',
     },
     id: {
         // Navigation
         'nav.platform': 'Platform',
         'nav.access_control': 'Kontrol Akses',
         'nav.dashboard': 'Dasbor',
+        'nav.messages': 'Pesan',
         'nav.announcements': 'Pengumuman',
         'nav.users': 'Manajemen Pengguna',
         'nav.roles': 'Manajemen Role',
@@ -519,6 +530,15 @@ const messages: Record<Locale, Record<string, string>> = {
         'announcements.inactive': 'Nonaktif',
         'announcements.all_types': 'Semua Tipe',
         'announcements.search_placeholder': 'Cari judul atau isi pengumuman...',
+
+        // Messages / Chat
+        'messages.title': 'Pesan',
+        'messages.search_users': 'Cari pengguna...',
+        'messages.no_contacts': 'Pengguna tidak ditemukan.',
+        'messages.select_conversation': 'Pilih pengguna untuk mulai mengobrol.',
+        'messages.no_messages': 'Belum ada pesan. Mulai percakapan sekarang!',
+        'messages.type_placeholder': 'Tulis pesan...',
+        'messages.send': 'Kirim',
     },
 };
 

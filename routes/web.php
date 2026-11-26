@@ -7,6 +7,7 @@ use App\Http\Controllers\DatabaseExplorerController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\LaravelLogViewerController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\RequestLogController;
 use App\Http\Controllers\RoleManagementController;
@@ -19,6 +20,11 @@ Route::post('locale', [LocaleController::class, 'update'])->name('locale.update'
 
 Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('messages')->name('messages.')->group(function () {
+        Route::get('/', [MessageController::class, 'index'])->name('index');
+        Route::post('/', [MessageController::class, 'store'])->name('store');
+    });
 
     Route::prefix('announcements')->name('announcements.')->group(function () {
         Route::get('/', [AnnouncementController::class, 'index'])->middleware('permission:announcements.view')->name('index');

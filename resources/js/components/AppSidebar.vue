@@ -10,6 +10,7 @@ import {
     KeyRound,
     LayoutGrid,
     Megaphone,
+    MessageSquare,
     ShieldCheck,
     Table2,
     Users,
@@ -40,6 +41,11 @@ const mainNavItems = computed<NavItem[]>(() => [
         title: t('nav.dashboard'),
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: t('nav.messages'),
+        href: '/app/messages',
+        icon: MessageSquare,
     },
 ]);
 
