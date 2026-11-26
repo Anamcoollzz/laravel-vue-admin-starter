@@ -54,11 +54,11 @@ class DatabaseExplorerController extends Controller
 
                 return [
                     'name' => $name,
-                    'type_name' => (string) ($col['type_name'] ?? $col['type'] ?? ''),
-                    'type' => (string) ($col['type'] ?? ''),
-                    'nullable' => (bool) ($col['nullable'] ?? false),
+                    'type_name' => $col['type_name'],
+                    'type' => $col['type'],
+                    'nullable' => $col['nullable'],
                     'default' => $col['default'] !== null ? (string) $col['default'] : null,
-                    'auto_increment' => (bool) ($col['auto_increment'] ?? false),
+                    'auto_increment' => $col['auto_increment'],
                     'index_type' => $indexMeta['type'],
                     'index_name' => $indexMeta['name'],
                 ];

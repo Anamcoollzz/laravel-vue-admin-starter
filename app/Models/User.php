@@ -53,7 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     /**
      * Get the public URL of the user's avatar, or null when none is uploaded.
      *
-     * @return Attribute<string|null, never>
+     * @return Attribute<non-falsy-string|null, never>
      */
     protected function avatar(): Attribute
     {
