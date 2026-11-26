@@ -435,7 +435,9 @@ const deleteItem = (path: string, type: 'file' | 'directory') => {
                         </Button>
                         <Button
                             type="submit"
-                            :disabled="uploadForm.processing || !uploadForm.file"
+                            :disabled="
+                                uploadForm.processing || !uploadForm.file
+                            "
                         >
                             {{
                                 uploadForm.processing

@@ -87,7 +87,9 @@ const deleteBackup = (filename: string) => {
             </Button>
         </div>
 
-        <InputError :message="(createForm.errors as Record<string, string>).backup" />
+        <InputError
+            :message="(createForm.errors as Record<string, string>).backup"
+        />
 
         <div class="overflow-hidden rounded-xl border border-border bg-card">
             <div class="overflow-x-auto">

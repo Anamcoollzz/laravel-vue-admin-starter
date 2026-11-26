@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, Head, Link, usePage } from "@inertiajs/vue3";
+import { Form, Head, Link, usePage } from '@inertiajs/vue3';
 import {
     AtSign,
     Briefcase,
@@ -8,28 +8,28 @@ import {
     Trash2,
     Upload,
     Users,
-} from "@lucide/vue";
-import type { Component } from "vue";
-import { computed, ref } from "vue";
-import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
-import DeleteUser from "@/components/DeleteUser.vue";
-import Heading from "@/components/Heading.vue";
-import InputError from "@/components/InputError.vue";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useInitials } from "@/composables/useInitials";
-import { useTranslation } from "@/composables/useTranslation";
-import { edit } from "@/routes/profile";
-import { send } from "@/routes/verification";
-import type { User } from "@/types";
+} from '@lucide/vue';
+import type { Component } from 'vue';
+import { computed, ref } from 'vue';
+import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import DeleteUser from '@/components/DeleteUser.vue';
+import Heading from '@/components/Heading.vue';
+import InputError from '@/components/InputError.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useInitials } from '@/composables/useInitials';
+import { useTranslation } from '@/composables/useTranslation';
+import { edit } from '@/routes/profile';
+import { send } from '@/routes/verification';
+import type { User } from '@/types';
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
-                title: "Profile settings",
+                title: 'Profile settings',
                 href: edit(),
             },
         ],
@@ -39,11 +39,11 @@ defineOptions({
 type SocialField = {
     name: keyof Pick<
         User,
-        | "github_url"
-        | "linkedin_url"
-        | "facebook_url"
-        | "instagram_url"
-        | "x_url"
+        | 'github_url'
+        | 'linkedin_url'
+        | 'facebook_url'
+        | 'instagram_url'
+        | 'x_url'
     >;
     label: string;
     placeholder: string;
@@ -69,33 +69,33 @@ const displayedAvatar = computed(() => {
 
 const socialFields: SocialField[] = [
     {
-        name: "github_url",
-        label: "GitHub",
-        placeholder: "https://github.com/username",
+        name: 'github_url',
+        label: 'GitHub',
+        placeholder: 'https://github.com/username',
         icon: Code,
     },
     {
-        name: "linkedin_url",
-        label: "LinkedIn",
-        placeholder: "https://linkedin.com/in/username",
+        name: 'linkedin_url',
+        label: 'LinkedIn',
+        placeholder: 'https://linkedin.com/in/username',
         icon: Briefcase,
     },
     {
-        name: "facebook_url",
-        label: "Facebook",
-        placeholder: "https://facebook.com/username",
+        name: 'facebook_url',
+        label: 'Facebook',
+        placeholder: 'https://facebook.com/username',
         icon: Users,
     },
     {
-        name: "instagram_url",
-        label: "Instagram",
-        placeholder: "https://instagram.com/username",
+        name: 'instagram_url',
+        label: 'Instagram',
+        placeholder: 'https://instagram.com/username',
         icon: Camera,
     },
     {
-        name: "x_url",
-        label: "X (Twitter)",
-        placeholder: "https://x.com/username",
+        name: 'x_url',
+        label: 'X (Twitter)',
+        placeholder: 'https://x.com/username',
         icon: AtSign,
     },
 ];
@@ -124,7 +124,7 @@ const onRemoveAvatar = () => {
     removeAvatar.value = true;
 
     if (avatarInput.value) {
-        avatarInput.value.value = "";
+        avatarInput.value.value = '';
     }
 };
 
@@ -137,7 +137,7 @@ const onSaved = () => {
     removeAvatar.value = false;
 
     if (avatarInput.value) {
-        avatarInput.value.value = "";
+        avatarInput.value.value = '';
     }
 };
 </script>

@@ -41,7 +41,9 @@ const { t } = useTranslation();
             </div>
             <Dialog>
                 <DialogTrigger as-child>
-                    <Button variant="destructive" data-test="delete-user-button"
+                    <Button
+                        variant="destructive"
+                        data-test="delete-user-button"
                         >{{ t('delete_account.title') }}</Button
                     >
                 </DialogTrigger>

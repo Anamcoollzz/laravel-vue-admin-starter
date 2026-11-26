@@ -114,7 +114,8 @@ const inferFieldType = (rawType: string): string => {
     if (t.includes('int')) return 'integer';
     if (t.includes('bool')) return 'boolean';
     if (t.includes('decimal') || t.includes('numeric')) return 'decimal';
-    if (t.includes('float') || t.includes('double') || t.includes('real')) return 'float';
+    if (t.includes('float') || t.includes('double') || t.includes('real'))
+        return 'float';
     if (t.includes('datetime')) return 'datetime';
     if (t.includes('timestamp')) return 'timestamp';
     if (t === 'date') return 'date';
@@ -195,7 +196,8 @@ const openEditRowDialog = (row: Record<string, unknown>) => {
     for (const col of props.columns) {
         if (col.name !== props.primaryKey) {
             const val = row[col.name];
-            editable[col.name] = val === null || val === undefined ? '' : String(val);
+            editable[col.name] =
+                val === null || val === undefined ? '' : String(val);
         }
     }
 
@@ -321,10 +323,7 @@ const formatCell = (value: unknown): string => {
                         :placeholder="t('common.search')"
                     />
                 </div>
-                <p
-                    v-if="!primaryKey"
-                    class="text-xs text-muted-foreground"
-                >
+                <p v-if="!primaryKey" class="text-xs text-muted-foreground">
                     {{ t('database.no_pk_notice') }}
                 </p>
             </div>
@@ -339,9 +338,11 @@ const formatCell = (value: unknown): string => {
                                 <th
                                     v-for="col in columns"
                                     :key="col.name"
-                                    class="whitespace-nowrap px-4 py-3 font-mono text-xs font-medium"
+                                    class="px-4 py-3 font-mono text-xs font-medium whitespace-nowrap"
                                 >
-                                    <span class="inline-flex items-center gap-1">
+                                    <span
+                                        class="inline-flex items-center gap-1"
+                                    >
                                         <Key
                                             v-if="col.name === primaryKey"
                                             class="size-3 text-amber-500"
@@ -355,7 +356,7 @@ const formatCell = (value: unknown): string => {
                                         (can('database.edit') ||
                                             can('database.delete'))
                                     "
-                                    class="whitespace-nowrap px-4 py-3 text-right font-medium"
+                                    class="px-4 py-3 text-right font-medium whitespace-nowrap"
                                 >
                                     {{ t('common.actions') }}
                                 </th>
@@ -365,9 +366,7 @@ const formatCell = (value: unknown): string => {
                             <tr
                                 v-for="(row, idx) in rows.data"
                                 :key="
-                                    primaryKey
-                                        ? String(row[primaryKey])
-                                        : idx
+                                    primaryKey ? String(row[primaryKey]) : idx
                                 "
                                 class="hover:bg-muted/30"
                             >
@@ -377,7 +376,7 @@ const formatCell = (value: unknown): string => {
                                     class="max-w-xs truncate px-4 py-2.5 font-mono text-xs"
                                     :class="
                                         row[col.name] === null
-                                            ? 'italic text-muted-foreground/60'
+                                            ? 'text-muted-foreground/60 italic'
                                             : ''
                                     "
                                 >
@@ -389,7 +388,7 @@ const formatCell = (value: unknown): string => {
                                         (can('database.edit') ||
                                             can('database.delete'))
                                     "
-                                    class="whitespace-nowrap px-4 py-2.5 text-right"
+                                    class="px-4 py-2.5 text-right whitespace-nowrap"
                                 >
                                     <div class="inline-flex items-center gap-1">
                                         <Button
@@ -518,7 +517,9 @@ const formatCell = (value: unknown): string => {
                                         : t('database.no')
                                 }}
                             </td>
-                            <td class="px-4 py-3 font-mono text-xs text-muted-foreground">
+                            <td
+                                class="px-4 py-3 font-mono text-xs text-muted-foreground"
+                            >
                                 {{ col.default ?? '-' }}
                             </td>
                             <td class="px-4 py-3">
@@ -609,8 +610,7 @@ const formatCell = (value: unknown): string => {
 
                     <template
                         v-if="
-                            renamingColumn &&
-                            renamingColumn.name !== primaryKey
+                            renamingColumn && renamingColumn.name !== primaryKey
                         "
                     >
                         <div class="grid gap-2">
@@ -722,7 +722,9 @@ const formatCell = (value: unknown): string => {
                     </div>
 
                     <InputError
-                        :message="(rowForm.errors as Record<string, string>).row"
+                        :message="
+                            (rowForm.errors as Record<string, string>).row
+                        "
                     />
 
                     <DialogFooter>
