@@ -169,6 +169,7 @@ const deleteUser = (user: UserRow) => {
                     v-if="can('users.create')"
                     export-url="/app/users/export"
                     import-url="/app/users/import"
+                    template-url="/app/users/import-template"
                     columns-hint="name, email, password, roles"
                 />
                 <Button v-if="can('users.create')" @click="openCreateDialog">

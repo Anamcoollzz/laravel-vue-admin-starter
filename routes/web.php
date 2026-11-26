@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserManagementController::class, 'index'])->middleware('permission:users.view')->name('index');
         Route::get('/export', [UserManagementController::class, 'export'])->middleware('permission:users.view')->name('export');
+        Route::get('/import-template', [UserManagementController::class, 'template'])->middleware('permission:users.create')->name('import-template');
         Route::post('/import', [UserManagementController::class, 'import'])->middleware('permission:users.create')->name('import');
         Route::post('/', [UserManagementController::class, 'store'])->middleware('permission:users.create')->name('store');
         Route::put('/{user}', [UserManagementController::class, 'update'])->middleware('permission:users.edit')->name('update');
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::prefix('roles')->name('roles.')->group(function () {
         Route::get('/', [RoleManagementController::class, 'index'])->middleware('permission:roles.view')->name('index');
         Route::get('/export', [RoleManagementController::class, 'export'])->middleware('permission:roles.view')->name('export');
+        Route::get('/import-template', [RoleManagementController::class, 'template'])->middleware('permission:roles.create')->name('import-template');
         Route::post('/import', [RoleManagementController::class, 'import'])->middleware('permission:roles.create')->name('import');
         Route::post('/', [RoleManagementController::class, 'store'])->middleware('permission:roles.create')->name('store');
         Route::put('/{role}', [RoleManagementController::class, 'update'])->middleware('permission:roles.edit')->name('update');
@@ -34,6 +36,7 @@ Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::prefix('permissions')->name('permissions.')->group(function () {
         Route::get('/', [PermissionManagementController::class, 'index'])->middleware('permission:permissions.view')->name('index');
         Route::get('/export', [PermissionManagementController::class, 'export'])->middleware('permission:permissions.view')->name('export');
+        Route::get('/import-template', [PermissionManagementController::class, 'template'])->middleware('permission:permissions.create')->name('import-template');
         Route::post('/import', [PermissionManagementController::class, 'import'])->middleware('permission:permissions.create')->name('import');
         Route::post('/', [PermissionManagementController::class, 'store'])->middleware('permission:permissions.create')->name('store');
         Route::put('/{permission}', [PermissionManagementController::class, 'update'])->middleware('permission:permissions.edit')->name('update');

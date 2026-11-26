@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ImportTemplateExport;
 use App\Exports\RolesExport;
 use App\Imports\RolesImport;
 use Illuminate\Http\RedirectResponse;
@@ -91,6 +92,17 @@ class RoleManagementController extends Controller
     public function export(): BinaryFileResponse
     {
         return Excel::download(new RolesExport, 'roles.xlsx');
+    }
+
+    public function template(): BinaryFileResponse
+    {
+        return Excel::download(new ImportTemplateExport(
+            ['name', 'permissions'],
+            [
+                ['manager', 'users.view, users.edit'],
+                ['auditor', 'users.view, roles.view, permissions.view'],
+            ],
+        ), 'roles-import-template.xlsx');
     }
 
     public function import(Request $request): RedirectResponse

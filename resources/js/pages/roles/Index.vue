@@ -163,6 +163,7 @@ const deleteRole = (role: RoleRow) => {
                     v-if="can('roles.create')"
                     export-url="/app/roles/export"
                     import-url="/app/roles/import"
+                    template-url="/app/roles/import-template"
                     columns-hint="name, permissions"
                 />
                 <Button v-if="can('roles.create')" @click="openCreateDialog">

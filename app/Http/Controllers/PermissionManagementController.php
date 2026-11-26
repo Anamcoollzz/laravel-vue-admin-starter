@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ImportTemplateExport;
 use App\Exports\PermissionsExport;
 use App\Imports\PermissionsImport;
 use Illuminate\Http\RedirectResponse;
@@ -80,6 +81,17 @@ class PermissionManagementController extends Controller
     public function export(): BinaryFileResponse
     {
         return Excel::download(new PermissionsExport, 'permissions.xlsx');
+    }
+
+    public function template(): BinaryFileResponse
+    {
+        return Excel::download(new ImportTemplateExport(
+            ['name', 'guard_name'],
+            [
+                ['reports.view', 'web'],
+                ['reports.export', 'web'],
+            ],
+        ), 'permissions-import-template.xlsx');
     }
 
     public function import(Request $request): RedirectResponse

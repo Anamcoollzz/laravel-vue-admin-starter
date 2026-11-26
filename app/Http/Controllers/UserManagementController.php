@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ImportTemplateExport;
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use App\Models\User;
@@ -111,6 +112,17 @@ class UserManagementController extends Controller
     public function export(): BinaryFileResponse
     {
         return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
+    public function template(): BinaryFileResponse
+    {
+        return Excel::download(new ImportTemplateExport(
+            ['name', 'email', 'password', 'roles'],
+            [
+                ['John Doe', 'john@example.com', 'secret123', 'admin'],
+                ['Jane Smith', 'jane@example.com', '', 'editor, viewer'],
+            ],
+        ), 'users-import-template.xlsx');
     }
 
     public function import(Request $request): RedirectResponse

@@ -151,6 +151,7 @@ const deletePermission = (permission: PermissionRow) => {
                     v-if="can('permissions.create')"
                     export-url="/app/permissions/export"
                     import-url="/app/permissions/import"
+                    template-url="/app/permissions/import-template"
                     columns-hint="name, guard_name"
                 />
                 <Button
