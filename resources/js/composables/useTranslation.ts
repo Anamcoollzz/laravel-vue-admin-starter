@@ -79,6 +79,55 @@ const messages: Record<Locale, Record<string, string>> = {
         "permissions.roles_count": "Assigned Roles",
         "permissions.guard": "Guard",
         "permissions.search_placeholder": "Search permission name...",
+
+        // User Menu & Settings Layout
+        "menu.settings": "Settings",
+        "menu.logout": "Log out",
+        "settings.title": "Settings",
+        "settings.description": "Manage your profile and account settings",
+        "settings.profile": "Profile",
+        "settings.security": "Security",
+        "settings.appearance": "Appearance",
+
+        // Profile Settings
+        "profile.page_title": "Profile settings",
+        "profile.title": "Profile",
+        "profile.description":
+            "Update your avatar, name, email address, and social links",
+        "profile.avatar": "Avatar",
+        "profile.upload_photo": "Upload photo",
+        "profile.remove": "Remove",
+        "profile.avatar_hint": "JPG, PNG, or WEBP. Max 2 MB.",
+        "profile.full_name": "Full name",
+        "profile.email_address": "Email address",
+        "profile.email_unverified": "Your email address is unverified.",
+        "profile.resend_verification":
+            "Click here to re-send the verification email.",
+        "profile.verification_sent":
+            "A new verification link has been sent to your email address.",
+        "profile.social_links": "Social links",
+        "profile.social_links_desc":
+            "Add links to your social media profiles (optional).",
+
+        // Appearance Settings
+        "appearance.title": "Appearance settings",
+        "appearance.description":
+            "Update the appearance settings for your account",
+        "appearance.light": "Light",
+        "appearance.dark": "Dark",
+        "appearance.system": "System",
+
+        // Delete Account
+        "delete_account.title": "Delete account",
+        "delete_account.description":
+            "Delete your account and all of its resources",
+        "delete_account.warning": "Warning",
+        "delete_account.warning_desc":
+            "Please proceed with caution, this cannot be undone.",
+        "delete_account.confirm_title":
+            "Are you sure you want to delete your account?",
+        "delete_account.confirm_desc":
+            "Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
     },
     id: {
         // Navigation
@@ -156,6 +205,54 @@ const messages: Record<Locale, Record<string, string>> = {
         "permissions.roles_count": "Role Terkait",
         "permissions.guard": "Guard",
         "permissions.search_placeholder": "Cari nama izin...",
+
+        // User Menu & Settings Layout
+        "menu.settings": "Pengaturan",
+        "menu.logout": "Keluar",
+        "settings.title": "Pengaturan",
+        "settings.description": "Kelola profil dan pengaturan akun Anda",
+        "settings.profile": "Profil",
+        "settings.security": "Keamanan",
+        "settings.appearance": "Tampilan",
+
+        // Profile Settings
+        "profile.page_title": "Pengaturan profil",
+        "profile.title": "Profil",
+        "profile.description":
+            "Perbarui avatar, nama, alamat email, dan tautan media sosial Anda",
+        "profile.avatar": "Avatar",
+        "profile.upload_photo": "Unggah foto",
+        "profile.remove": "Hapus",
+        "profile.avatar_hint": "JPG, PNG, atau WEBP. Maks 2 MB.",
+        "profile.full_name": "Nama lengkap",
+        "profile.email_address": "Alamat email",
+        "profile.email_unverified": "Alamat email Anda belum terverifikasi.",
+        "profile.resend_verification":
+            "Klik di sini untuk mengirim ulang email verifikasi.",
+        "profile.verification_sent":
+            "Tautan verifikasi baru telah dikirim ke alamat email Anda.",
+        "profile.social_links": "Tautan media sosial",
+        "profile.social_links_desc":
+            "Tambahkan tautan ke profil media sosial Anda (opsional).",
+
+        // Appearance Settings
+        "appearance.title": "Pengaturan tampilan",
+        "appearance.description": "Perbarui pengaturan tampilan akun Anda",
+        "appearance.light": "Terang",
+        "appearance.dark": "Gelap",
+        "appearance.system": "Sistem",
+
+        // Delete Account
+        "delete_account.title": "Hapus akun",
+        "delete_account.description":
+            "Hapus akun Anda beserta seluruh datanya",
+        "delete_account.warning": "Peringatan",
+        "delete_account.warning_desc":
+            "Harap berhati-hati, tindakan ini tidak dapat dibatalkan.",
+        "delete_account.confirm_title":
+            "Apakah Anda yakin ingin menghapus akun Anda?",
+        "delete_account.confirm_desc":
+            "Setelah akun dihapus, seluruh data dan sumber daya terkait akan dihapus secara permanen. Masukkan kata sandi Anda untuk mengonfirmasi penghapusan akun secara permanen.",
     },
 };
 

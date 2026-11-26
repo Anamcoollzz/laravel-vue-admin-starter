@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useInitials } from "@/composables/useInitials";
+import { useTranslation } from "@/composables/useTranslation";
 import { edit } from "@/routes/profile";
 import { send } from "@/routes/verification";
 import type { User } from "@/types";
@@ -52,6 +53,7 @@ type SocialField = {
 const page = usePage();
 const user = computed(() => page.props.auth.user as User);
 const { getInitials } = useInitials();
+const { t } = useTranslation();
 
 const avatarInput = ref<HTMLInputElement | null>(null);
 const avatarPreview = ref<string | null>(null);
@@ -141,15 +143,15 @@ const onSaved = () => {
 </script>
 
 <template>
-    <Head title="Profile settings" />
+    <Head :title="t('profile.page_title')" />
 
-    <h1 class="sr-only">Profile settings</h1>
+    <h1 class="sr-only">{{ t('profile.page_title') }}</h1>
 
     <div class="flex flex-col space-y-6">
         <Heading
             variant="small"
-            title="Profile"
-            description="Update your avatar, name, email address, and social links"
+            :title="t('profile.title')"
+            :description="t('profile.description')"
         />
 
         <Form
@@ -160,7 +162,7 @@ const onSaved = () => {
             @success="onSaved"
         >
             <div class="grid gap-2">
-                <Label for="avatar">Avatar</Label>
+                <Label for="avatar">{{ t('profile.avatar') }}</Label>
                 <div class="flex items-center gap-4">
                     <Avatar class="size-20 overflow-hidden rounded-full">
                         <AvatarImage
@@ -182,7 +184,7 @@ const onSaved = () => {
                                 @click="avatarInput?.click()"
                             >
                                 <Upload class="mr-1.5 size-4" />
-                                Upload photo
+                                {{ t('profile.upload_photo') }}
                             </Button>
                             <Button
                                 v-if="displayedAvatar"
@@ -193,11 +195,11 @@ const onSaved = () => {
                                 @click="onRemoveAvatar"
                             >
                                 <Trash2 class="mr-1.5 size-4" />
-                                Remove
+                                {{ t('profile.remove') }}
                             </Button>
                         </div>
                         <p class="text-xs text-muted-foreground">
-                            JPG, PNG, or WEBP. Max 2 MB.
+                            {{ t('profile.avatar_hint') }}
                         </p>
                     </div>
                 </div>
@@ -221,7 +223,7 @@ const onSaved = () => {
             </div>
 
             <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">{{ t('common.name') }}</Label>
                 <Input
                     id="name"
                     class="mt-1 block w-full"
@@ -229,13 +231,13 @@ const onSaved = () => {
                     :default-value="user.name"
                     required
                     autocomplete="name"
-                    placeholder="Full name"
+                    :placeholder="t('profile.full_name')"
                 />
                 <InputError class="mt-2" :message="errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="email">Email address</Label>
+                <Label for="email">{{ t('profile.email_address') }}</Label>
                 <Input
                     id="email"
                     type="email"
@@ -244,20 +246,20 @@ const onSaved = () => {
                     :default-value="user.email"
                     required
                     autocomplete="username"
-                    placeholder="Email address"
+                    :placeholder="t('profile.email_address')"
                 />
                 <InputError class="mt-2" :message="errors.email" />
             </div>
 
             <div v-if="page.props.mustVerifyEmail && !user.email_verified_at">
                 <p class="-mt-4 text-sm text-muted-foreground">
-                    Your email address is unverified.
+                    {{ t('profile.email_unverified') }}
                     <Link
                         :href="send()"
                         as="button"
                         class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                     >
-                        Click here to re-send the verification email.
+                        {{ t('profile.resend_verification') }}
                     </Link>
                 </p>
 
@@ -265,15 +267,17 @@ const onSaved = () => {
                     v-if="page.props.status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
-                    A new verification link has been sent to your email address.
+                    {{ t('profile.verification_sent') }}
                 </div>
             </div>
 
             <div class="space-y-4 border-t border-border pt-6">
                 <div>
-                    <h3 class="text-sm font-medium">Social links</h3>
+                    <h3 class="text-sm font-medium">
+                        {{ t('profile.social_links') }}
+                    </h3>
                     <p class="text-sm text-muted-foreground">
-                        Add links to your social media profiles (optional).
+                        {{ t('profile.social_links_desc') }}
                     </p>
                 </div>
 
@@ -302,9 +306,12 @@ const onSaved = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <Button :disabled="processing" data-test="update-profile-button"
-                    >Save</Button
+                <Button
+                    :disabled="processing"
+                    data-test="update-profile-button"
                 >
+                    {{ t('common.save') }}
+                </Button>
             </div>
         </Form>
     </div>
