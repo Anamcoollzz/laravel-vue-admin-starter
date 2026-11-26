@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
-import { ref, watch } from 'vue';
-import InputError from '@/components/InputError.vue';
-import ExcelActions from '@/components/ExcelActions.vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import { Pencil, Plus, Search, Trash2 } from "@lucide/vue";
+import { ref, watch } from "vue";
+import InputError from "@/components/InputError.vue";
+import ExcelActions from "@/components/ExcelActions.vue";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -13,10 +13,11 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useTranslation } from '@/composables/useTranslation';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { usePermission } from "@/composables/usePermission";
+import { useTranslation } from "@/composables/useTranslation";
 
 type PermissionRow = {
     id: number;
@@ -48,19 +49,20 @@ const props = defineProps<{
 }>();
 
 const { t } = useTranslation();
+const { can } = usePermission();
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
-                title: 'Permission Management',
-                href: '/app/permissions',
+                title: "Permission Management",
+                href: "/app/permissions",
             },
         ],
     },
 });
 
-const search = ref(props.filters.search ?? '');
+const search = ref(props.filters.search ?? "");
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 watch(search, (value) => {
@@ -70,7 +72,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/app/permissions',
+            "/app/permissions",
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -81,7 +83,7 @@ const isDialogOpen = ref(false);
 const editingPermission = ref<PermissionRow | null>(null);
 
 const form = useForm({
-    name: '',
+    name: "",
 });
 
 const openCreateDialog = () => {
@@ -108,7 +110,7 @@ const submitForm = () => {
             },
         });
     } else {
-        form.post('/app/permissions', {
+        form.post("/app/permissions", {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -118,7 +120,7 @@ const submitForm = () => {
 };
 
 const deletePermission = (permission: PermissionRow) => {
-    if (!window.confirm(t('common.confirm_delete'))) {
+    if (!window.confirm(t("common.confirm_delete"))) {
         return;
     }
 
@@ -137,22 +139,26 @@ const deletePermission = (permission: PermissionRow) => {
         >
             <div>
                 <h1 class="text-2xl font-semibold tracking-tight">
-                    {{ t('permissions.title') }}
+                    {{ t("permissions.title") }}
                 </h1>
                 <p class="text-sm text-muted-foreground">
-                    {{ t('permissions.description') }}
+                    {{ t("permissions.description") }}
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
                 <ExcelActions
+                    v-if="can('permissions.create')"
                     export-url="/app/permissions/export"
                     import-url="/app/permissions/import"
                     columns-hint="name, guard_name"
                 />
-                <Button @click="openCreateDialog">
+                <Button
+                    v-if="can('permissions.create')"
+                    @click="openCreateDialog"
+                >
                     <Plus class="mr-2 size-4" />
-                    {{ t('permissions.add') }}
+                    {{ t("permissions.add") }}
                 </Button>
             </div>
         </div>
@@ -177,16 +183,16 @@ const deletePermission = (permission: PermissionRow) => {
                     <thead class="border-b border-border bg-muted/40">
                         <tr>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('common.name') }}
+                                {{ t("common.name") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('permissions.guard') }}
+                                {{ t("permissions.guard") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('permissions.roles_count') }}
+                                {{ t("permissions.roles_count") }}
                             </th>
                             <th class="px-4 py-3 text-right font-medium">
-                                {{ t('common.actions') }}
+                                {{ t("common.actions") }}
                             </th>
                         </tr>
                     </thead>
@@ -212,6 +218,7 @@ const deletePermission = (permission: PermissionRow) => {
                                     <Button
                                         variant="ghost"
                                         size="icon"
+                                        v-if="can('permissions.edit')"
                                         :title="t('common.edit')"
                                         @click="openEditDialog(permission)"
                                     >
@@ -221,6 +228,7 @@ const deletePermission = (permission: PermissionRow) => {
                                         variant="ghost"
                                         size="icon"
                                         class="text-destructive hover:text-destructive"
+                                        v-if="can('permissions.delete')"
                                         :title="t('common.delete')"
                                         @click="deletePermission(permission)"
                                     >
@@ -234,7 +242,7 @@ const deletePermission = (permission: PermissionRow) => {
                                 colspan="4"
                                 class="px-4 py-8 text-center text-muted-foreground"
                             >
-                                {{ t('common.no_data') }}
+                                {{ t("common.no_data") }}
                             </td>
                         </tr>
                     </tbody>
@@ -246,9 +254,9 @@ const deletePermission = (permission: PermissionRow) => {
                 class="flex flex-col items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm sm:flex-row"
             >
                 <p class="text-muted-foreground">
-                    {{ t('common.showing') }} {{ permissions.from }} -
-                    {{ permissions.to }} {{ t('common.of') }}
-                    {{ permissions.total }} {{ t('common.entries') }}
+                    {{ t("common.showing") }} {{ permissions.from }} -
+                    {{ permissions.to }} {{ t("common.of") }}
+                    {{ permissions.total }} {{ t("common.entries") }}
                 </p>
                 <div class="flex flex-wrap items-center gap-1">
                     <template
@@ -285,15 +293,15 @@ const deletePermission = (permission: PermissionRow) => {
                     <DialogTitle>
                         {{
                             editingPermission
-                                ? t('permissions.edit')
-                                : t('permissions.add')
+                                ? t("permissions.edit")
+                                : t("permissions.add")
                         }}
                     </DialogTitle>
                     <DialogDescription>
                         {{
                             editingPermission
-                                ? t('permissions.edit_desc')
-                                : t('permissions.create_desc')
+                                ? t("permissions.edit_desc")
+                                : t("permissions.create_desc")
                         }}
                     </DialogDescription>
                 </DialogHeader>
@@ -301,7 +309,7 @@ const deletePermission = (permission: PermissionRow) => {
                 <form class="space-y-4" @submit.prevent="submitForm">
                     <div class="grid gap-2">
                         <Label for="permission-name">
-                            {{ t('common.name') }}
+                            {{ t("common.name") }}
                         </Label>
                         <Input
                             id="permission-name"
@@ -319,13 +327,13 @@ const deletePermission = (permission: PermissionRow) => {
                             variant="outline"
                             @click="isDialogOpen = false"
                         >
-                            {{ t('common.cancel') }}
+                            {{ t("common.cancel") }}
                         </Button>
                         <Button type="submit" :disabled="form.processing">
                             {{
                                 form.processing
-                                    ? t('common.saving')
-                                    : t('common.save')
+                                    ? t("common.saving")
+                                    : t("common.save")
                             }}
                         </Button>
                     </DialogFooter>

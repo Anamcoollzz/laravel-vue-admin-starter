@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
-import { ref, watch } from 'vue';
-import InputError from '@/components/InputError.vue';
-import ExcelActions from '@/components/ExcelActions.vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import { Pencil, Plus, Search, Trash2 } from "@lucide/vue";
+import { ref, watch } from "vue";
+import InputError from "@/components/InputError.vue";
+import ExcelActions from "@/components/ExcelActions.vue";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -13,10 +13,11 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useTranslation } from '@/composables/useTranslation';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { usePermission } from "@/composables/usePermission";
+import { useTranslation } from "@/composables/useTranslation";
 
 type UserRow = {
     id: number;
@@ -49,19 +50,20 @@ const props = defineProps<{
 }>();
 
 const { t } = useTranslation();
+const { can } = usePermission();
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
-                title: 'User Management',
-                href: '/app/users',
+                title: "User Management",
+                href: "/app/users",
             },
         ],
     },
 });
 
-const search = ref(props.filters.search ?? '');
+const search = ref(props.filters.search ?? "");
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 watch(search, (value) => {
@@ -71,7 +73,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/app/users',
+            "/app/users",
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -82,10 +84,10 @@ const isDialogOpen = ref(false);
 const editingUser = ref<UserRow | null>(null);
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
     roles: [] as string[],
 });
 
@@ -103,8 +105,8 @@ const openEditDialog = (user: UserRow) => {
     form.clearErrors();
     form.name = user.name;
     form.email = user.email;
-    form.password = '';
-    form.password_confirmation = '';
+    form.password = "";
+    form.password_confirmation = "";
     form.roles = [...user.roles];
     isDialogOpen.value = true;
 };
@@ -126,7 +128,7 @@ const submitForm = () => {
             },
         });
     } else {
-        form.post('/app/users', {
+        form.post("/app/users", {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -136,7 +138,7 @@ const submitForm = () => {
 };
 
 const deleteUser = (user: UserRow) => {
-    if (!window.confirm(t('common.confirm_delete'))) {
+    if (!window.confirm(t("common.confirm_delete"))) {
         return;
     }
 
@@ -155,22 +157,23 @@ const deleteUser = (user: UserRow) => {
         >
             <div>
                 <h1 class="text-2xl font-semibold tracking-tight">
-                    {{ t('users.title') }}
+                    {{ t("users.title") }}
                 </h1>
                 <p class="text-sm text-muted-foreground">
-                    {{ t('users.description') }}
+                    {{ t("users.description") }}
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
                 <ExcelActions
+                    v-if="can('users.create')"
                     export-url="/app/users/export"
                     import-url="/app/users/import"
                     columns-hint="name, email, password, roles"
                 />
-                <Button @click="openCreateDialog">
+                <Button v-if="can('users.create')" @click="openCreateDialog">
                     <Plus class="mr-2 size-4" />
-                    {{ t('users.add') }}
+                    {{ t("users.add") }}
                 </Button>
             </div>
         </div>
@@ -195,19 +198,19 @@ const deleteUser = (user: UserRow) => {
                     <thead class="border-b border-border bg-muted/40">
                         <tr>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('common.name') }}
+                                {{ t("common.name") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('common.email') }}
+                                {{ t("common.email") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('users.roles') }}
+                                {{ t("users.roles") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('common.created_at') }}
+                                {{ t("common.created_at") }}
                             </th>
                             <th class="px-4 py-3 text-right font-medium">
-                                {{ t('common.actions') }}
+                                {{ t("common.actions") }}
                             </th>
                         </tr>
                     </thead>
@@ -236,18 +239,19 @@ const deleteUser = (user: UserRow) => {
                                         v-if="user.roles.length === 0"
                                         class="text-xs text-muted-foreground"
                                     >
-                                        {{ t('users.no_roles') }}
+                                        {{ t("users.no_roles") }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-muted-foreground">
-                                {{ user.created_at ?? '-' }}
+                                {{ user.created_at ?? "-" }}
                             </td>
                             <td class="px-4 py-3 text-right">
                                 <div class="inline-flex items-center gap-1">
                                     <Button
                                         variant="ghost"
                                         size="icon"
+                                        v-if="can('users.edit')"
                                         :title="t('common.edit')"
                                         @click="openEditDialog(user)"
                                     >
@@ -257,6 +261,7 @@ const deleteUser = (user: UserRow) => {
                                         variant="ghost"
                                         size="icon"
                                         class="text-destructive hover:text-destructive"
+                                        v-if="can('users.delete')"
                                         :title="t('common.delete')"
                                         @click="deleteUser(user)"
                                     >
@@ -270,7 +275,7 @@ const deleteUser = (user: UserRow) => {
                                 colspan="5"
                                 class="px-4 py-8 text-center text-muted-foreground"
                             >
-                                {{ t('common.no_data') }}
+                                {{ t("common.no_data") }}
                             </td>
                         </tr>
                     </tbody>
@@ -282,9 +287,9 @@ const deleteUser = (user: UserRow) => {
                 class="flex flex-col items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm sm:flex-row"
             >
                 <p class="text-muted-foreground">
-                    {{ t('common.showing') }} {{ users.from }} - {{ users.to }}
-                    {{ t('common.of') }} {{ users.total }}
-                    {{ t('common.entries') }}
+                    {{ t("common.showing") }} {{ users.from }} - {{ users.to }}
+                    {{ t("common.of") }} {{ users.total }}
+                    {{ t("common.entries") }}
                 </p>
                 <div class="flex flex-wrap items-center gap-1">
                     <template v-for="link in users.links" :key="link.label">
@@ -316,20 +321,20 @@ const deleteUser = (user: UserRow) => {
             <DialogContent class="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>
-                        {{ editingUser ? t('users.edit') : t('users.add') }}
+                        {{ editingUser ? t("users.edit") : t("users.add") }}
                     </DialogTitle>
                     <DialogDescription>
                         {{
                             editingUser
-                                ? t('users.edit_desc')
-                                : t('users.create_desc')
+                                ? t("users.edit_desc")
+                                : t("users.create_desc")
                         }}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form class="space-y-4" @submit.prevent="submitForm">
                     <div class="grid gap-2">
-                        <Label for="user-name">{{ t('common.name') }}</Label>
+                        <Label for="user-name">{{ t("common.name") }}</Label>
                         <Input
                             id="user-name"
                             v-model="form.name"
@@ -340,7 +345,7 @@ const deleteUser = (user: UserRow) => {
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="user-email">{{ t('common.email') }}</Label>
+                        <Label for="user-email">{{ t("common.email") }}</Label>
                         <Input
                             id="user-email"
                             v-model="form.email"
@@ -352,7 +357,7 @@ const deleteUser = (user: UserRow) => {
 
                     <div class="grid gap-2">
                         <Label for="user-password">
-                            {{ t('common.password') }}
+                            {{ t("common.password") }}
                         </Label>
                         <Input
                             id="user-password"
@@ -368,7 +373,7 @@ const deleteUser = (user: UserRow) => {
 
                     <div class="grid gap-2">
                         <Label for="user-password-confirmation">
-                            {{ t('common.password_confirmation') }}
+                            {{ t("common.password_confirmation") }}
                         </Label>
                         <Input
                             id="user-password-confirmation"
@@ -379,7 +384,7 @@ const deleteUser = (user: UserRow) => {
                     </div>
 
                     <div class="grid gap-2">
-                        <Label>{{ t('users.roles') }}</Label>
+                        <Label>{{ t("users.roles") }}</Label>
                         <div
                             class="grid grid-cols-2 gap-2 rounded-lg border border-border p-3"
                         >
@@ -400,7 +405,7 @@ const deleteUser = (user: UserRow) => {
                                 v-if="roles.length === 0"
                                 class="col-span-2 text-xs text-muted-foreground"
                             >
-                                {{ t('users.no_roles') }}
+                                {{ t("users.no_roles") }}
                             </p>
                         </div>
                         <InputError :message="form.errors.roles" />
@@ -412,13 +417,13 @@ const deleteUser = (user: UserRow) => {
                             variant="outline"
                             @click="isDialogOpen = false"
                         >
-                            {{ t('common.cancel') }}
+                            {{ t("common.cancel") }}
                         </Button>
                         <Button type="submit" :disabled="form.processing">
                             {{
                                 form.processing
-                                    ? t('common.saving')
-                                    : t('common.save')
+                                    ? t("common.saving")
+                                    : t("common.save")
                             }}
                         </Button>
                     </DialogFooter>

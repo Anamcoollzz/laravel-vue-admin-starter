@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link } from "@inertiajs/vue3";
 import {
     BookOpen,
     FolderGit2,
@@ -7,12 +7,12 @@ import {
     LayoutGrid,
     ShieldCheck,
     Users,
-} from '@lucide/vue';
-import { computed } from 'vue';
-import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
-import NavUser from '@/components/NavUser.vue';
+} from "@lucide/vue";
+import { computed } from "vue";
+import AppLogo from "@/components/AppLogo.vue";
+import NavFooter from "@/components/NavFooter.vue";
+import NavMain from "@/components/NavMain.vue";
+import NavUser from "@/components/NavUser.vue";
 import {
     Sidebar,
     SidebarContent,
@@ -21,48 +21,58 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { useTranslation } from '@/composables/useTranslation';
-import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+} from "@/components/ui/sidebar";
+import { usePermission } from "@/composables/usePermission";
+import { useTranslation } from "@/composables/useTranslation";
+import { dashboard } from "@/routes";
+import type { NavItem } from "@/types";
 
 const { t } = useTranslation();
 
 const mainNavItems = computed<NavItem[]>(() => [
     {
-        title: t('nav.dashboard'),
+        title: t("nav.dashboard"),
         href: dashboard(),
         icon: LayoutGrid,
     },
 ]);
 
-const accessControlNavItems = computed<NavItem[]>(() => [
-    {
-        title: t('nav.users'),
-        href: '/app/users',
-        icon: Users,
-    },
-    {
-        title: t('nav.roles'),
-        href: '/app/roles',
-        icon: ShieldCheck,
-    },
-    {
-        title: t('nav.permissions'),
-        href: '/app/permissions',
-        icon: KeyRound,
-    },
-]);
+const { can } = usePermission();
+
+const accessControlNavItems = computed<NavItem[]>(() =>
+    [
+        {
+            title: t("nav.users"),
+            href: "/app/users",
+            icon: Users,
+            permission: "users.view",
+        },
+        {
+            title: t("nav.roles"),
+            href: "/app/roles",
+            icon: ShieldCheck,
+            permission: "roles.view",
+        },
+        {
+            title: t("nav.permissions"),
+            href: "/app/permissions",
+            icon: KeyRound,
+            permission: "permissions.view",
+        },
+    ]
+        .filter((item) => can(item.permission))
+        .map(({ permission: _permission, ...item }) => item),
+);
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        title: "Repository",
+        href: "https://github.com/laravel/vue-starter-kit",
         icon: FolderGit2,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
+        title: "Documentation",
+        href: "https://laravel.com/docs/starter-kits#vue",
         icon: BookOpen,
     },
 ];
@@ -85,6 +95,7 @@ const footerNavItems: NavItem[] = [
         <SidebarContent>
             <NavMain :items="mainNavItems" :label="t('nav.platform')" />
             <NavMain
+                v-if="accessControlNavItems.length > 0"
                 :items="accessControlNavItems"
                 :label="t('nav.access_control')"
             />

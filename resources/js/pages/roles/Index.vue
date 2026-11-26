@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
-import { ref, watch } from 'vue';
-import InputError from '@/components/InputError.vue';
-import ExcelActions from '@/components/ExcelActions.vue';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Head, Link, router, useForm } from "@inertiajs/vue3";
+import { Pencil, Plus, Search, Trash2 } from "@lucide/vue";
+import { ref, watch } from "vue";
+import InputError from "@/components/InputError.vue";
+import ExcelActions from "@/components/ExcelActions.vue";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -13,10 +13,11 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useTranslation } from '@/composables/useTranslation';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { usePermission } from "@/composables/usePermission";
+import { useTranslation } from "@/composables/useTranslation";
 
 type RoleRow = {
     id: number;
@@ -49,19 +50,20 @@ const props = defineProps<{
 }>();
 
 const { t } = useTranslation();
+const { can } = usePermission();
 
 defineOptions({
     layout: {
         breadcrumbs: [
             {
-                title: 'Role Management',
-                href: '/app/roles',
+                title: "Role Management",
+                href: "/app/roles",
             },
         ],
     },
 });
 
-const search = ref(props.filters.search ?? '');
+const search = ref(props.filters.search ?? "");
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 watch(search, (value) => {
@@ -71,7 +73,7 @@ watch(search, (value) => {
 
     searchTimeout = setTimeout(() => {
         router.get(
-            '/app/roles',
+            "/app/roles",
             { search: value || undefined },
             { preserveState: true, preserveScroll: true, replace: true },
         );
@@ -82,7 +84,7 @@ const isDialogOpen = ref(false);
 const editingRole = ref<RoleRow | null>(null);
 
 const form = useForm({
-    name: '',
+    name: "",
     permissions: [] as string[],
 });
 
@@ -120,7 +122,7 @@ const submitForm = () => {
             },
         });
     } else {
-        form.post('/app/roles', {
+        form.post("/app/roles", {
             preserveScroll: true,
             onSuccess: () => {
                 isDialogOpen.value = false;
@@ -130,7 +132,7 @@ const submitForm = () => {
 };
 
 const deleteRole = (role: RoleRow) => {
-    if (!window.confirm(t('common.confirm_delete'))) {
+    if (!window.confirm(t("common.confirm_delete"))) {
         return;
     }
 
@@ -149,22 +151,23 @@ const deleteRole = (role: RoleRow) => {
         >
             <div>
                 <h1 class="text-2xl font-semibold tracking-tight">
-                    {{ t('roles.title') }}
+                    {{ t("roles.title") }}
                 </h1>
                 <p class="text-sm text-muted-foreground">
-                    {{ t('roles.description') }}
+                    {{ t("roles.description") }}
                 </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
                 <ExcelActions
+                    v-if="can('roles.create')"
                     export-url="/app/roles/export"
                     import-url="/app/roles/import"
                     columns-hint="name, permissions"
                 />
-                <Button @click="openCreateDialog">
+                <Button v-if="can('roles.create')" @click="openCreateDialog">
                     <Plus class="mr-2 size-4" />
-                    {{ t('roles.add') }}
+                    {{ t("roles.add") }}
                 </Button>
             </div>
         </div>
@@ -189,16 +192,16 @@ const deleteRole = (role: RoleRow) => {
                     <thead class="border-b border-border bg-muted/40">
                         <tr>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('common.name') }}
+                                {{ t("common.name") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('roles.permissions') }}
+                                {{ t("roles.permissions") }}
                             </th>
                             <th class="px-4 py-3 font-medium">
-                                {{ t('roles.users_count') }}
+                                {{ t("roles.users_count") }}
                             </th>
                             <th class="px-4 py-3 text-right font-medium">
-                                {{ t('common.actions') }}
+                                {{ t("common.actions") }}
                             </th>
                         </tr>
                     </thead>
@@ -224,7 +227,7 @@ const deleteRole = (role: RoleRow) => {
                                         v-if="role.permissions.length === 0"
                                         class="text-xs text-muted-foreground"
                                     >
-                                        {{ t('roles.no_permissions') }}
+                                        {{ t("roles.no_permissions") }}
                                     </span>
                                 </div>
                             </td>
@@ -236,6 +239,7 @@ const deleteRole = (role: RoleRow) => {
                                     <Button
                                         variant="ghost"
                                         size="icon"
+                                        v-if="can('roles.edit')"
                                         :title="t('common.edit')"
                                         @click="openEditDialog(role)"
                                     >
@@ -245,6 +249,7 @@ const deleteRole = (role: RoleRow) => {
                                         variant="ghost"
                                         size="icon"
                                         class="text-destructive hover:text-destructive"
+                                        v-if="can('roles.delete')"
                                         :title="t('common.delete')"
                                         @click="deleteRole(role)"
                                     >
@@ -258,7 +263,7 @@ const deleteRole = (role: RoleRow) => {
                                 colspan="4"
                                 class="px-4 py-8 text-center text-muted-foreground"
                             >
-                                {{ t('common.no_data') }}
+                                {{ t("common.no_data") }}
                             </td>
                         </tr>
                     </tbody>
@@ -270,9 +275,9 @@ const deleteRole = (role: RoleRow) => {
                 class="flex flex-col items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm sm:flex-row"
             >
                 <p class="text-muted-foreground">
-                    {{ t('common.showing') }} {{ roles.from }} - {{ roles.to }}
-                    {{ t('common.of') }} {{ roles.total }}
-                    {{ t('common.entries') }}
+                    {{ t("common.showing") }} {{ roles.from }} - {{ roles.to }}
+                    {{ t("common.of") }} {{ roles.total }}
+                    {{ t("common.entries") }}
                 </p>
                 <div class="flex flex-wrap items-center gap-1">
                     <template v-for="link in roles.links" :key="link.label">
@@ -304,20 +309,20 @@ const deleteRole = (role: RoleRow) => {
             <DialogContent class="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>
-                        {{ editingRole ? t('roles.edit') : t('roles.add') }}
+                        {{ editingRole ? t("roles.edit") : t("roles.add") }}
                     </DialogTitle>
                     <DialogDescription>
                         {{
                             editingRole
-                                ? t('roles.edit_desc')
-                                : t('roles.create_desc')
+                                ? t("roles.edit_desc")
+                                : t("roles.create_desc")
                         }}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form class="space-y-4" @submit.prevent="submitForm">
                     <div class="grid gap-2">
-                        <Label for="role-name">{{ t('common.name') }}</Label>
+                        <Label for="role-name">{{ t("common.name") }}</Label>
                         <Input
                             id="role-name"
                             v-model="form.name"
@@ -328,7 +333,7 @@ const deleteRole = (role: RoleRow) => {
                     </div>
 
                     <div class="grid gap-2">
-                        <Label>{{ t('roles.permissions') }}</Label>
+                        <Label>{{ t("roles.permissions") }}</Label>
                         <div
                             class="grid max-h-60 grid-cols-2 gap-2 overflow-y-auto rounded-lg border border-border p-3"
                         >
@@ -351,7 +356,7 @@ const deleteRole = (role: RoleRow) => {
                                 v-if="permissions.length === 0"
                                 class="col-span-2 text-xs text-muted-foreground"
                             >
-                                {{ t('roles.no_permissions') }}
+                                {{ t("roles.no_permissions") }}
                             </p>
                         </div>
                         <InputError :message="form.errors.permissions" />
@@ -363,13 +368,13 @@ const deleteRole = (role: RoleRow) => {
                             variant="outline"
                             @click="isDialogOpen = false"
                         >
-                            {{ t('common.cancel') }}
+                            {{ t("common.cancel") }}
                         </Button>
                         <Button type="submit" :disabled="form.processing">
                             {{
                                 form.processing
-                                    ? t('common.saving')
-                                    : t('common.save')
+                                    ? t("common.saving")
+                                    : t("common.save")
                             }}
                         </Button>
                     </DialogFooter>
